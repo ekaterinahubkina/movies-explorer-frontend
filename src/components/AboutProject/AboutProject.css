@@ -1,0 +1,79 @@
+.about-project__wrapper {
+    max-width: 1280px;
+    margin: auto;
+    padding-top: 118px;
+}
+
+.about-project__info {
+    display: grid;
+    width: calc(100% - 2 * 70px);
+    margin: auto;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 40px;
+}
+
+.about-project__stages h3,
+.about-project__duration h3 {
+    margin: 70px 0 26px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: -0.04em;
+    color: #000000;
+}
+
+.about-project__stages p,
+.about-project__duration p {
+    max-width: 550px;
+    margin: 0;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #000;
+}
+
+.about-project__duration-bar {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: repeat(2, minmax(36px, 1fr));
+    row-gap: 5px;
+    width: calc(100% - 2 * 70px);
+    margin: 110px auto 100px;
+}
+
+.about-project__backend-duration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    color: #fff;
+}
+
+.about-project__frontend-duration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F2F2F2;
+    color: #000;
+}
+
+.about-project__backend-duration span,
+.about-project__frontend-duration span {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.about-project__backend,
+.about-project__frontend {
+    align-self: center;
+    justify-self: center;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: #A0A0A0;
+}

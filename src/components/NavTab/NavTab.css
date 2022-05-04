@@ -1,0 +1,32 @@
+.navTab {
+    background: #000;
+}
+
+.navTab__wrapper {
+    max-width: 1280px;
+    display: flex;
+    margin: auto;
+    min-height: 66px;
+    align-items: center;
+    justify-content: center;
+}
+
+.navTab__list {
+    display: flex;
+    color: #fff;
+    list-style: none;
+    min-width: 285px;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+}
+
+.navTab__list li {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    align-items: center;
+    text-decoration: underline;
+    cursor: pointer;
+}
