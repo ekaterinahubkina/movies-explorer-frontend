@@ -2,12 +2,12 @@ import './NavTab.css';
 
 function NavTab () {
     return (
-        <nav className='navTab'>
-            <div className='navTab__wrapper'>
-                <ul className='navTab__list'>
+        <nav className='nav-tab'>
+            <div className='nav-tab__wrapper'>
+                <ul className='nav-tab__list'>
                     <li><a href='#about-project'>О проекте</a></li>
-                    <li>Технологии</li>
-                    <li>Студент</li>
+                    <li><a href='#techs'>Технологии</a></li>
+                    <li><a href='#about-me'>Студент</a></li>
                 </ul>
             </div>
         </nav>

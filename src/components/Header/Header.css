@@ -12,26 +12,6 @@
     min-height: 74px;
 }
 
-@media screen and (max-width: 1279px) {
-    .header__wrapper {
-        padding: 0 30px;
-    }
-}
-
-@media screen and (max-width: 767px) {
-    .header__wrapper {
-        padding: 0 14px;
-    }
-    .header__login-btn {
-        width: 54px;
-        height: 26px;
-        font-size: 10px;
-    }
-    .header__register {
-        font-size: 10px;
-    }
-}
-
 .header__register {
     text-decoration: none;
     color: #000000;
@@ -55,4 +35,24 @@
     font-size: 12px;
     line-height: 16px;
     cursor: pointer;
+}
+
+@media screen and (max-width: 1279px) {
+    .header__wrapper {
+        padding: 0 30px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .header__wrapper {
+        padding: 0 14px;
+    }
+    .header__login-btn {
+        width: 54px;
+        height: 26px;
+        font-size: 10px;
+    }
+    .header__register {
+        font-size: 10px;
+    }
 }
