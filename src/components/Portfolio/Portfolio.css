@@ -42,5 +42,49 @@
     display: block;
     background: url(../../images/arrow.svg) no-repeat;
     background-position: right center;
+}
 
+@media screen and (max-width: 1279px) {
+    .portfolio__wrapper {
+        max-width: 768px;
+        padding-bottom: 90px;
+    }
+
+    .portfolio__title {
+        width: calc(100% - 2 * 50px);
+    }
+
+    .portfolio__list {
+        width: calc(100% - 2 * 50px);
+    }
+
+    .portfolio__list li {
+        font-size: 28px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .portfolio__wrapper {
+        max-width: 320px;
+        padding-bottom: 70px;
+    }
+
+    .portfolio__title {
+        width: calc(100% - 2 * 14px);
+        font-size: 14px;
+    }
+
+    .portfolio__list {
+        width: calc(100% - 2 * 14px);
+        margin-top: 40px;
+    }
+
+    .portfolio__list li {
+        font-size: 18px;
+        line-height: 28px;
+    }
+
+    .portfolio__list a {
+        background-size: 10px 10px;
+    }
 }
