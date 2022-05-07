@@ -1,12 +1,14 @@
 import './Movies.css';
+import SearchForm from '../SearchForm/SearchForm';
 
-function Movies () {
+function Movies() {
     return (
-        <section className='movies'>
+        <div className='movies'>
             <div className='movies__wrapper'>
-
+                <SearchForm />
             </div>
-        </section>
+
+        </div>
     )
 }
 
