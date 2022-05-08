@@ -3,9 +3,11 @@ import { Link, NavLink } from 'react-router-dom';
 
 const Navigation = ({ location }) => {
 
-const linkActiveClass = ({isActive}) => {
-    return `header__link ${isActive && 'header__link_active'}`;  
-}
+    const linkActiveClass = ({ isActive }) => {
+        return `header__link ${isActive && 'header__link_active'}`;
+    }
+
+    // const headerNavigationClass = `header__navigation ${currentWidth < 1279 && 'header__navigation_type_mobile'}`;
 
     return (
         <>
@@ -17,17 +19,13 @@ const linkActiveClass = ({isActive}) => {
                     </div>
                     :
                     <>
-                    <div className='header__navigation'>
-                        <NavLink to='/movies' className={linkActiveClass}>Фильмы</NavLink>
-                        <NavLink to='/saved-movies' className={linkActiveClass}>Сохранённые фильмы</NavLink>
-                    </div>
-                    <Link to='/profile' className='header__profile-btn'>Аккаунт<div></div></Link>
+                        <div className='header__navigation'>
+                            <NavLink to='/movies' className={linkActiveClass}>Фильмы</NavLink>
+                            <NavLink to='/saved-movies' className={linkActiveClass}>Сохранённые фильмы</NavLink>
+                        </div>
+                        <Link to='/profile' className='header__profile-btn'>Аккаунт<div></div></Link>
                     </>
             }
-            {/* {
-                location.pathname === '/movies' || location.pathname === 'saved-movies' &&
-                <div className=''
-        } */}
         </>
     )
 }

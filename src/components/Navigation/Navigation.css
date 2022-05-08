@@ -55,12 +55,19 @@
 }
 
 .header__navigation {
+    position: relative;
+    z-index: 3;
     min-width: 212px;
     display: flex;
     justify-content: space-between;
 }
 
+.header__navigation_type_mobile {
+    display: block;
+}
+
 .header__link {
+    display: block;
     text-decoration: none;
     color: #000;
     font-weight: 400;
