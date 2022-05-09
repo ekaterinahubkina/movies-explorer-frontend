@@ -4,11 +4,11 @@ import { useState } from 'react';
 
 const BurgerMenu = ({ location, currentWidth, isMobileMenuOpen, onBurgerMenuClick, onCloseMobileMenu }) => {
 
-    // const [isChecked, setIsChecked] = useState(false);
+    const [isChecked, setIsChecked] = useState(isMobileMenuOpen);
 
-    // const handleChange = () => {
-    //     setIsChecked(!isChecked);
-    // };
+    const handleChange = () => {
+        setIsChecked(!isChecked);
+    };
 
     return (
         <>
@@ -18,11 +18,11 @@ const BurgerMenu = ({ location, currentWidth, isMobileMenuOpen, onBurgerMenuClic
                     :
                     <>
                         <label className='burger-menu'>
-                            <input type='checkbox' onClick={onBurgerMenuClick} className='burger-menu__checkbox'></input>
+                            <input type='checkbox' onClick={onBurgerMenuClick} onChange={handleChange} className='burger-menu__checkbox'></input>
                             <span className='burger-menu__burger'></span>
                         </label>
                         <MobileNavigation 
-                        // isChecked={isChecked} 
+                        isChecked={isChecked} 
                         urrentWidth={currentWidth}
                         isMobileMenuOpen={isMobileMenuOpen}
                         onBurgerMenuClick={onBurgerMenuClick}

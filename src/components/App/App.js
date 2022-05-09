@@ -16,7 +16,7 @@ function App() {
   }
 
   const handleBurgerMenuClick = () => {
-    setIsMobileMenuOpen(true);
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   }
 
   const closeMobileMenu = () => {
@@ -41,7 +41,8 @@ function App() {
       onCloseMobileMenu={closeMobileMenu}/>
       <Routes>
         <Route path='/' element={<Main />}></Route>
-        <Route path='/movies' element={<Movies />}></Route>
+        <Route path='/movies' element={<Movies location={location}/>}></Route>
+        <Route path='/saved-movies' element={<Movies location={location}/>}></Route>
       </Routes>
       <Footer />
     </div>

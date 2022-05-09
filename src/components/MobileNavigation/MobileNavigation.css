@@ -54,4 +54,12 @@
     .mobile-navigation__popup {
         width: 100%;
     }
+
+    .header__profile-btn_mobile {
+        margin-bottom: 46px;
+    }
+
+    .mobile-navigation__popup>div {
+        margin-top: 144px;
+    }
 }
