@@ -7,8 +7,6 @@ const Navigation = ({ location }) => {
         return `header__link ${isActive && 'header__link_active'}`;
     }
 
-    // const headerNavigationClass = `header__navigation ${currentWidth < 1279 && 'header__navigation_type_mobile'}`;
-
     return (
         <>
             {

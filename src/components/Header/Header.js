@@ -7,15 +7,6 @@ import BurgerMenu from '../BurgerMenu/BurgerMenu';
 
 function Header({ location, currentWidth, isMobileMenuOpen, onBurgerMenuClick, onCloseMobileMenu }) {
 
-    // const [currentWidth, setCurrentWidth] = useState(window.innerWidth);
-    // //window.onresize = () => setCurrentWidth;
-
-    // useEffect(() => {
-    //     window.onresize = () => setCurrentWidth;
-    // }, [currentWidth])
-    // console.log(currentWidth);
-
-
     return (
         <header className={`header ${location.pathname === '/' && 'header_main'}`}>
             <div className='header__wrapper'>

@@ -58,6 +58,7 @@
     position: relative;
     z-index: 3;
     min-width: 212px;
+    padding-left: 50px;
     display: flex;
     justify-content: space-between;
 }

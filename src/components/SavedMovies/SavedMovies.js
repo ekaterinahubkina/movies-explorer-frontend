@@ -1,17 +1,16 @@
-import './Movies.css';
-import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
+import SearchForm from '../SearchForm/SearchForm';
+import './SavedMovies.css';
 
-function Movies({ location }) {
+const SavedMovies = ({ location }) => {
     return (
-        <section className='movies'>
+        <section className='movies saved-movies'>
             <div className='movies__wrapper'>
                 <SearchForm />
                 <MoviesCardList location={location} />
             </div>
-
         </section>
     )
 }
 
-export default Movies;
+export default SavedMovies;

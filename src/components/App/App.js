@@ -6,6 +6,9 @@ import Footer from '../Footer/Footer';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Movies from '../Movies/Movies';
+import SavedMovies from '../SavedMovies/SavedMovies';
+import Profile from '../Profile/Profile';
+import Register from '../Register/Register';
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -33,18 +36,23 @@ function App() {
 
   return (
     <div className="App">
-      <Header 
-      location={location} 
-      currentWidth={currentWidth} 
-      isMobileMenuOpen={isMobileMenuOpen} 
-      onBurgerMenuClick={handleBurgerMenuClick}
-      onCloseMobileMenu={closeMobileMenu}/>
+      <Header
+        location={location}
+        currentWidth={currentWidth}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onBurgerMenuClick={handleBurgerMenuClick}
+        onCloseMobileMenu={closeMobileMenu} />
       <Routes>
         <Route path='/' element={<Main />}></Route>
-        <Route path='/movies' element={<Movies location={location}/>}></Route>
-        <Route path='/saved-movies' element={<Movies location={location}/>}></Route>
+        <Route path='/movies' element={<Movies location={location} />}></Route>
+        <Route path='/saved-movies' element={<SavedMovies location={location} />}></Route>
+        <Route path='/profile' element={<Profile name='Екатерина' email='ekaterinahubkina@yndex.by' />}></Route>
+        <Route path='/signin' element={<Register />}></Route>
       </Routes>
-      <Footer />
+      {location.pathname === '/profile' || location.pathname === '/signin' ?
+        null
+        :
+        <Footer />}
     </div>
   );
 }
