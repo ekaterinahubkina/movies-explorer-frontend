@@ -9,6 +9,7 @@ import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
+import Login from '../Login/Login';
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -36,20 +37,23 @@ function App() {
 
   return (
     <div className="App">
-      <Header
-        location={location}
-        currentWidth={currentWidth}
-        isMobileMenuOpen={isMobileMenuOpen}
-        onBurgerMenuClick={handleBurgerMenuClick}
-        onCloseMobileMenu={closeMobileMenu} />
+      {location.pathname === '/signin' || location.pathname === '/signup' ?
+        null :
+        <Header
+          location={location}
+          currentWidth={currentWidth}
+          isMobileMenuOpen={isMobileMenuOpen}
+          onBurgerMenuClick={handleBurgerMenuClick}
+          onCloseMobileMenu={closeMobileMenu} />}
       <Routes>
         <Route path='/' element={<Main />}></Route>
         <Route path='/movies' element={<Movies location={location} />}></Route>
         <Route path='/saved-movies' element={<SavedMovies location={location} />}></Route>
         <Route path='/profile' element={<Profile name='Екатерина' email='ekaterinahubkina@yndex.by' />}></Route>
-        <Route path='/signin' element={<Register />}></Route>
+        <Route path='/signup' element={<Register />}></Route>
+        <Route path='/signin' element={<Login />}></Route>
       </Routes>
-      {location.pathname === '/profile' || location.pathname === '/signin' ?
+      {location.pathname === '/profile' || location.pathname === '/signin' || location.pathname === '/signup' ?
         null
         :
         <Footer />}
