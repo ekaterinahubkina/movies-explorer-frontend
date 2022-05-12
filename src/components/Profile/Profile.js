@@ -2,7 +2,7 @@ import "./Profile.css";
 
 const Profile = ({ name, email }) => {
     return (
-        <section className="section profile">
+        <section className="profile">
             <div className="profile__container">
                 <h2 className="profile__greeting">Привет, {name}!</h2>
                 <div className="profile__info">

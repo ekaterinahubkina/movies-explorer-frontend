@@ -10,8 +10,12 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
+import PageNotFound from '../PageNotFound/PageNotFound';
 
 function App() {
+  const routesForHeader = ['/', '/movies', '/saved-movies', '/profile'];
+  const routesForFooter = ['/', '/movies', '/saved-movies'];
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentWidth, setCurrentWidth] = useState(window.innerWidth);
 
@@ -37,14 +41,14 @@ function App() {
 
   return (
     <div className="App">
-      {location.pathname === '/signin' || location.pathname === '/signup' ?
-        null :
+      {routesForHeader.includes(location.pathname) ?
         <Header
           location={location}
           currentWidth={currentWidth}
           isMobileMenuOpen={isMobileMenuOpen}
           onBurgerMenuClick={handleBurgerMenuClick}
-          onCloseMobileMenu={closeMobileMenu} />}
+          onCloseMobileMenu={closeMobileMenu} />
+        : null}
       <Routes>
         <Route path='/' element={<Main />}></Route>
         <Route path='/movies' element={<Movies location={location} />}></Route>
@@ -52,11 +56,11 @@ function App() {
         <Route path='/profile' element={<Profile name='Екатерина' email='ekaterinahubkina@yndex.by' />}></Route>
         <Route path='/signup' element={<Register />}></Route>
         <Route path='/signin' element={<Login />}></Route>
+        <Route path='*' element={<PageNotFound />}></Route>
       </Routes>
-      {location.pathname === '/profile' || location.pathname === '/signin' || location.pathname === '/signup' ?
-        null
-        :
-        <Footer />}
+      {routesForFooter.includes(location.pathname) ?
+        <Footer />
+        : null}
     </div>
   );
 }

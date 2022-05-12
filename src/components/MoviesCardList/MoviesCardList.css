@@ -1,5 +1,7 @@
 .movies-card-list {
+    box-sizing: border-box;
     width: calc(100% - 2 * 70px);
+    min-height: calc(100vh - 488px);
     max-height: 1315px;
     margin: 0 auto;
     padding: 70px 0 10px;

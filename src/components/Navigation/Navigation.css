@@ -6,6 +6,7 @@
     font-size: 12px;
     line-height: 16px;
     cursor: pointer;
+    transition: all .5s ease-in;
 }
 
 .header__login-btn {
@@ -21,6 +22,7 @@
     font-size: 12px;
     line-height: 16px;
     cursor: pointer;
+    transition: all .4s ease-in;
 }
 
 .header__profile-btn {
@@ -87,8 +89,7 @@
 
     .header__navigation {
         display: none;
-    }
-    
+    } 
 }
 
 @media screen and (max-width: 767px) {

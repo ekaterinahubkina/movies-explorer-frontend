@@ -5,9 +5,7 @@
 .logo {
     transition: all .6s ease-in;
 }
-.logo:hover {
-    opacity: .7;
-}
+
 .header__wrapper {
     max-width: 1280px;
     display: flex;

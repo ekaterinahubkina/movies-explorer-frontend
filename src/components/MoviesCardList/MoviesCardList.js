@@ -1,14 +1,10 @@
-import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 
-const MoviesCardList = ({ location }) => {
+const MoviesCardList = ({ location, children }) => {
     return (
         <>
             <section className='movies-card-list'>
-                <MoviesCard location={location} />
-                <MoviesCard location={location} />
-                <MoviesCard location={location} />
-                <MoviesCard location={location} />
+                {children}
             </section>
             {location.pathname === '/movies' && 
             <div className='more-btn-container'>
