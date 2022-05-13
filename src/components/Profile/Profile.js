@@ -8,11 +8,11 @@ const Profile = ({ name, email }) => {
                 <div className="profile__info">
                     <div className="profile__info-container">
                         <label htmlFor="name">Имя</label>
-                        <input id="name" type='text' className="profile__input profile__input_type_name" value={name} readOnly></input>
+                        <input id="name" type='text' className="profile__input profile__input_type_name" value={name} readOnly required minLength='2' maxLength='30'></input>
                     </div>
                     <div className="profile__info-container">
                         <label htmlFor="email">E-mail</label>
-                        <input id='email' className="profile__input profile__input_type_email" value={email} readOnly></input>
+                        <input id='email' className="profile__input profile__input_type_email" value={email} readOnly required></input>
                     </div>
                 </div>
                 <div className="profile__buttons">
