@@ -1,3 +1,11 @@
+Ссылка на макет  
+https://www.figma.com/file/ztQ4ADU2UkyD3qnG4d30u6/Diploma-(Copy)?node-id=932%3A3228  
+Сcылка на домен  
+http://movies.hubkina.nomoredomains.xyz/
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
