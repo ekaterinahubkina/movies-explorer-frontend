@@ -1,0 +1,153 @@
+.about-project__wrapper {
+    max-width: 1280px;
+    margin: auto;
+    padding: 118px 0 100px;
+}
+
+.about-project__info {
+    display: grid;
+    width: calc(100% - 2 * 70px);
+    margin: 70px auto 0;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 40px;
+}
+
+.about-project__stages h3,
+.about-project__duration h3 {
+    margin: 0 0 26px;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: -0.04em;
+    color: #000000;
+}
+
+.about-project__stages p,
+.about-project__duration p {
+    max-width: 550px;
+    margin: 0;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #000;
+}
+
+.about-project__duration-bar {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: repeat(2, minmax(36px, 1fr));
+    row-gap: 5px;
+    width: calc(100% - 2 * 70px);
+    margin: 110px auto 0;
+}
+
+.about-project__backend-duration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    color: #fff;
+}
+
+.about-project__frontend-duration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F2F2F2;
+    color: #000;
+}
+
+.about-project__backend-duration span,
+.about-project__frontend-duration span {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.about-project__backend,
+.about-project__frontend {
+    align-self: center;
+    justify-self: center;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: #A0A0A0;
+}
+
+@media screen and (max-width: 1279px) {
+    .about-project__wrapper {
+        max-width: 768px;
+        padding: 90px 0;
+    }
+
+    .about-project__info {
+        width: calc(100% - 2 * 50px);
+    }
+
+    .about-project__stages h3,
+    .about-project__duration h3 {
+        margin-bottom: 22px;
+    }
+
+    .about-project__stages p,
+    .about-project__duration p {
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    .about-project__duration-bar {
+        width: calc(100% - 2 * 50px);
+        margin: 93px auto 0;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .about-project__wrapper {
+        max-width: 320px;
+        padding: 70px 0;
+    }
+
+    .about-project__info {
+        display: grid;
+        width: calc(100% - 2 * 18px);
+        margin: 60px auto 0;
+        grid-template-columns: 1fr;
+    }
+
+    .about-project__stages h3,
+    .about-project__duration h3 {
+        font-size: 18px;
+        line-height: 22px;
+        margin-bottom: 16px;
+    }
+
+    .about-project__stages p,
+    .about-project__duration p {
+        font-size: 11px;
+        line-height: 16px;
+    }
+
+    .about-project__stages {
+        margin-bottom: 56px;
+    }
+
+    .about-project__duration-bar {
+        width: calc(100% - 2 * 18px);
+        margin: 60px auto 0;
+        row-gap: 0;
+    }
+
+    .about-project__backend-duration span,
+    .about-project__frontend-duration span {
+        font-size: 11px;
+        line-height: 13px;
+    }
+
+    .about-project__backend,
+    .about-project__frontend {
+        font-size: 11px;
+        line-height: 13px;
+    }
+}

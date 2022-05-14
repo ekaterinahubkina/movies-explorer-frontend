@@ -1,0 +1,144 @@
+.auth {
+    box-sizing: border-box;
+    max-width: 396px;
+    min-height: 700px;
+    margin: 0 auto;
+    padding: 70px 0;
+}
+
+.form {
+    width: 100%;
+    min-height: 450px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form__title {
+    margin: 0;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+}
+
+.form__input-container {
+    margin-top: 40px;
+}
+
+.form__button {
+    background: #000;
+    border-radius: 3px;
+    border: none;
+    height: 45px;
+    width: 100%;
+    margin-top: 69px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    cursor: pointer;
+    transition: all .6s ease-in;
+}
+
+.form__button_type_login {
+    margin-top: 169px;
+}
+
+.form__button_disabled {
+    background: #F8F8F8;
+    color: #C2C2C2;
+}
+
+.form__signin {
+    display: block;
+    width: fit-content;
+    margin: 16px auto 0;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #A0A0A0;
+}
+
+.form__signin a {
+    text-decoration: none;
+    color: #000;
+    cursor: pointer;
+    transition: all .6s ease-in;
+}
+
+.form__label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #A0A0A0;
+}
+
+.form__input {
+    width: 100%;
+    height: 46px;
+    padding: 0 0 0 15px;
+    margin-bottom: 20px;
+    background: #F9F9F9;
+    border-radius: 8px;
+    border: none;
+}
+
+.form__input:last-of-type {
+    margin-bottom: 10px;
+}
+
+.form__error {
+    display: block;
+    min-height: 12px;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #FF4062;
+}
+
+@media screen and (max-width: 1279px) {
+    .auth {
+        min-height: 1024px;
+        padding: 232px 0;
+    }
+
+}
+
+@media screen and (max-width: 767px) {
+    .auth {
+        max-width: 260px;
+        min-height: 780px;
+        padding: 56px 0 30px;
+    }
+
+    .form {
+        min-height: 577px;
+        margin-top: 50px;
+    }
+
+    .form__input-container {
+        margin-top: 80px;
+    }
+
+    .form__button {
+        font-size: 12px;
+        line-height: 15px;
+        margin-top: 157px;
+    }
+
+    .form__button_type_login {
+        margin-top: 257px;
+    }
+
+    .form__title {
+        text-align: center;
+    }
+
+    .logo_type_auth {
+        display: flex;
+        width: fit-content;
+        margin: auto;
+    }
+}

@@ -1,0 +1,121 @@
+.search {
+    min-height: 242px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+}
+
+.search__form {
+    position: relative;
+    width: calc(100% - 2 * 70px);
+    margin: 0 auto;
+}
+
+.search__form::after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 1px;
+    background: #AAAAAA;
+    opacity: 0.2;
+    bottom: -43px;
+    left: 0;
+}
+
+.search__input-container {
+    position: relative;
+    margin-bottom: 26px;
+}
+
+.search__input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 72px;
+    opacity: 0.2;
+    border: 1.5px solid #AAAAAA;
+    border-radius: 8px;
+    padding: 0 0 0 25px;
+}
+
+.search__input::placeholder {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+    color: #A0A0A0;
+}
+
+.search__button {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translate(0, -50%);
+    background: #000;
+    color: #fff;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    border: none;
+    border-radius: 5px;
+    width: 100px;
+    height: 52px;
+}
+
+.search__checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+.search__checkbox-container p {
+    margin: 0 0 0 14px;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px
+}
+
+@media screen and (max-width: 1279px) {
+    .search {
+        min-height: 250px;
+    }
+
+    .search__form {
+        width: calc(100% - 2 * 30px);
+    }
+
+    .search__form::after {
+        bottom: -51px;
+    }
+}
+
+@media screen and (max-width:767px) {
+    .search__form {
+        width: calc(100% - 2 * 14px);
+    }
+
+    .search__form::after {
+        bottom: -63px;
+    }
+
+    .search__input {
+        min-height: 56px;
+        padding-left: 12px;
+    }
+
+    .search__button {
+        right: 6px;
+        width: 80px;
+        height: 44px;
+    }
+
+    .search__input::placeholder {
+        font-size: 16px;
+        line-height: 16px;
+    }
+
+    .search__input-container {
+        margin-bottom: 30px;
+    }
+
+    .search__checkbox-container p {
+        font-size: 11px;
+    }
+}

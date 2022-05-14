@@ -1,0 +1,43 @@
+.header_main {
+    background-color: #F3C1F8;
+}
+
+.logo {
+    transition: all .6s ease-in;
+}
+
+.header__wrapper {
+    max-width: 1280px;
+    display: flex;
+    margin: auto;
+    align-items: center;
+    min-height: 74px;
+}
+
+.header__content {
+    width: calc(100% - 2 * 70px);
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media screen and (max-width: 1279px) {
+    .header__wrapper {
+        max-width: 768px;
+    }
+
+    .header__content {
+        width: calc(100% - 2 * 30px);
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .header__wrapper {
+        max-width: 320px;
+    }
+    
+    .header__content {
+        width: calc(100% - 2 * 14px);
+    }
+}
