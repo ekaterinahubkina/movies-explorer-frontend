@@ -40,6 +40,10 @@
     transition: all .6s ease-in;
 }
 
+.form__button_disabled {
+    background-color: #A0A0A0;
+}
+
 .form__button_type_login {
     margin-top: 169px;
 }
@@ -145,5 +149,10 @@
         display: flex;
         width: fit-content;
         margin: auto;
+    }
+
+    .form__signin {
+        font-size: 12px;
+        line-height: 15px;
     }
 }

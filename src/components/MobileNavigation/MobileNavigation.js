@@ -18,7 +18,7 @@ const MobileNavigation = (props) => {
                     <NavLink to='/movies' onClick={props.onCloseMobileMenu && closeNavPopup} className={linkActiveClass}>Фильмы</NavLink>
                     <NavLink to='/saved-movies' onClick={props.onCloseMobileMenu && closeNavPopup} className={linkActiveClass}>Сохранённые фильмы</NavLink>
                 </div>
-                <Link to='/profile' className='header__profile-btn header__profile-btn_mobile'>Аккаунт<div></div></Link>
+                <Link to='/profile' onClick={props.onCloseMobileMenu && closeNavPopup} className='header__profile-btn header__profile-btn_mobile'>Аккаунт<div></div></Link>
             </div>
         </article>
     )
