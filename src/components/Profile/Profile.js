@@ -5,7 +5,7 @@ import { CurrentUserContext } from '../context/CurrentUserContext';
 import { useFormWithValidation } from '../useFormWithValidation/useFormWithValidation';
 
 
-const Profile = () => {
+const Profile = ({ loggedIn, onExit, onUpdateUserInfo }) => {
     const { values, errors, isValid, handleChange, resetForm } = useFormWithValidation();
     const currentUser = React.useContext(CurrentUserContext);
 
@@ -22,9 +22,13 @@ const Profile = () => {
 
     const handleUpdateUserInfoSubmit = (event) => {
         event.preventDefault();
-        alert('form submitted');
+        onUpdateUserInfo(values);
         resetForm({ name: currentUser.name, email: currentUser.email }, {}, false)
         setReadOnly(true);
+    }
+
+    const exit = () => {
+        loggedIn && onExit();
     }
 
     return (
@@ -54,7 +58,7 @@ const Profile = () => {
                         <>
                             <button type='button' className="profile__button profile__button_type_update"
                                 onClick={handleUpdateButtonClick}>Редактировать</button>
-                            <button className="profile__button profile__button_type_exit">Выйти из аккаунта</button>
+                            <button type="button" className="profile__button profile__button_type_exit" onClick={exit}>Выйти из аккаунта</button>
                         </>}
 
                 </div>

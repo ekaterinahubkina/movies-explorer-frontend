@@ -25,14 +25,14 @@ function App() {
   const [currentWidth, setCurrentWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-      mainApi.tokenCheck()
-        .then(() => {
-          setIsLoggedIn(true);
-        })
-        .catch(err => {
-          console.log(err);
-          localStorage.removeItem('token');
-        })
+    mainApi.tokenCheck()
+      .then(() => {
+        setIsLoggedIn(true);
+      })
+      .catch(err => {
+        console.log(err);
+        localStorage.removeItem('token');
+      })
   }, [])
 
   useEffect(() => {
@@ -87,6 +87,20 @@ function App() {
       })
   }
 
+  const handleExit = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem('token');
+    setCurrentUser({});
+  }
+
+  const handleUpdateUserInfo = ({ name, email }) => {
+    mainApi.editUserData({ name, email })
+      .then((res) => {
+        setCurrentUser(res);
+      })
+      .catch(err => console.log(err))
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
@@ -102,7 +116,7 @@ function App() {
           <Route path='/' element={<Main />}></Route>
           <Route path='/movies' element={<Movies location={location} />}></Route>
           <Route path='/saved-movies' element={<SavedMovies location={location} />}></Route>
-          <Route path='/profile' element={<Profile />}></Route>
+          <Route path='/profile' element={<Profile loggedIn={isLoggedIn} onExit={handleExit} onUpdateUserInfo={handleUpdateUserInfo} />}></Route>
           <Route path='/signup' element={<Register onRegisterSubmit={handleRegisterSubmit} />}></Route>
           <Route path='/signin' element={<Login onLoginSubmit={handleLoginSubmit} />}></Route>
           <Route path='*' element={<PageNotFound />}></Route>
