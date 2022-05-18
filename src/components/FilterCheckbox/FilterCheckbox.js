@@ -1,16 +1,14 @@
-import { useState } from 'react';
 import './FilterCheckbox.css';
 
-const FilterCheckbox = () => {
+const FilterCheckbox = ({isSearchCheckboxChecked, onSearchCheckboxChange}) => {
 
-    const [isChecked, setIsChecked] = useState(false);
     const handleChange = () => {
-        setIsChecked(!isChecked);
+        onSearchCheckboxChange();
     }
 
     return (
         <label className='filter-checkbox'>
-            <input type='checkbox' checked={isChecked} onChange={handleChange} className='filter-checkbox__input'></input>
+            <input type='checkbox' checked={isSearchCheckboxChecked} onChange={handleChange} className='filter-checkbox__input'></input>
             <span className='filter-checkbox__slider round'></span>
         </label>
     )

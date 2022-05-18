@@ -13,27 +13,37 @@ import Login from '../Login/Login';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import { CurrentUserContext } from '../context/CurrentUserContext';
 import mainApi from '../../utils/MainApi';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import moviesApi from '../../utils/MoviesApi';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentWidth, setCurrentWidth] = useState(window.innerWidth);
+  const [isUserChecked, setIsUserChecked] = useState(false);
+  const [movies, setMovies] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [searchMessage, setSearchMessage] = useState('');
+  const [isSearchCheckboxChecked, setIsSearchCheckboxChecked] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
   const routesForHeader = ['/', '/movies', '/saved-movies', '/profile'];
   const routesForFooter = ['/', '/movies', '/saved-movies'];
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [currentWidth, setCurrentWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     mainApi.tokenCheck()
       .then(() => {
         setIsLoggedIn(true);
+        setIsUserChecked(true);
       })
       .catch(err => {
         console.log(err);
+        setIsUserChecked(true);
         localStorage.removeItem('token');
       })
-  }, [])
+  }, [isUserChecked])
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -46,6 +56,48 @@ function App() {
       .catch(err => console.log(err));
   }, [isLoggedIn])
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return;
+    }
+    moviesApi.getMovies()
+      .then((res) => {
+        setMovies(res);
+      })
+      .catch(err => console.log(err))
+  }, [isLoggedIn])
+  // поиск фильмов
+
+  const handleSearchInputChange = (str) => {
+    setSearchMessage(str);
+    console.log(searchMessage);
+  }
+
+  const handleSearchCheckboxChange = () => {
+    setIsSearchCheckboxChecked(!isSearchCheckboxChecked);
+  }
+
+  const filterMovies = (arr, str) => {
+    let filteredMovies = [];
+    filteredMovies = arr.filter((item) => {
+      const nameRuToLowerCase = item.nameRU.toLowerCase();
+      const searchMessageToLowerCase = str.toLowerCase();
+      return nameRuToLowerCase.includes(searchMessageToLowerCase);
+    })
+    return isSearchCheckboxChecked ?
+      filteredMovies.filter((item) => {
+        return item.duration <= 40;
+      })
+      :
+      filteredMovies;
+  }
+
+  const handleMoviesSearchSumit = () => {
+    setFilteredMovies(filterMovies(movies, searchMessage));
+  }
+  console.log(filteredMovies);
+
+  // служебные
   const resizeHandler = () => {
     setCurrentWidth(window.innerWidth);
   }
@@ -64,11 +116,11 @@ function App() {
   }, [currentWidth])
 
 
-
+  // регистрация и авторизация 
   const handleRegisterSubmit = ({ name, password, email }) => {
     mainApi.register({ name, password, email })
       .then(() => {
-        navigate('/signin', { replace: true })
+        navigate('/signin');
       })
       .catch((err) => {
         console.log(err);
@@ -92,7 +144,7 @@ function App() {
     localStorage.removeItem('token');
     setCurrentUser({});
   }
-
+  console.log(filteredMovies);
   const handleUpdateUserInfo = ({ name, email }) => {
     mainApi.editUserData({ name, email })
       .then((res) => {
@@ -112,15 +164,42 @@ function App() {
             onBurgerMenuClick={handleBurgerMenuClick}
             onCloseMobileMenu={closeMobileMenu} />
           : null}
-        <Routes>
-          <Route path='/' element={<Main />}></Route>
-          <Route path='/movies' element={<Movies location={location} />}></Route>
-          <Route path='/saved-movies' element={<SavedMovies location={location} />}></Route>
-          <Route path='/profile' element={<Profile loggedIn={isLoggedIn} onExit={handleExit} onUpdateUserInfo={handleUpdateUserInfo} />}></Route>
-          <Route path='/signup' element={<Register onRegisterSubmit={handleRegisterSubmit} />}></Route>
-          <Route path='/signin' element={<Login onLoginSubmit={handleLoginSubmit} />}></Route>
-          <Route path='*' element={<PageNotFound />}></Route>
-        </Routes>
+        {isUserChecked ?
+          <Routes>
+            <Route path='/' element={<Main />}></Route>
+            <Route
+              path="/movies"
+              element={
+                <ProtectedRoute loggedIn={isLoggedIn}>
+                  <Movies movies={filteredMovies}
+                    location={location}
+                    searchMessage={searchMessage}
+                    onSearchInputChange={handleSearchInputChange}
+                    onSearchSubmit={handleMoviesSearchSumit}
+                    isSearchCheckboxChecked={isSearchCheckboxChecked}
+                    onSearchCheckboxChange={handleSearchCheckboxChange} />
+                </ProtectedRoute>
+              } />
+            <Route
+              path="/saved-movies"
+              element={
+                <ProtectedRoute loggedIn={isLoggedIn}>
+                  <SavedMovies location={location} searchMessage={searchMessage} onSearchInputChange={handleSearchInputChange} />
+                </ProtectedRoute>
+              } />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute loggedIn={isLoggedIn}>
+                  <Profile loggedIn={isLoggedIn} onExit={handleExit} onUpdateUserInfo={handleUpdateUserInfo} />
+                </ProtectedRoute>
+              } />
+            <Route path='/signup' element={<Register onRegisterSubmit={handleRegisterSubmit} />}></Route>
+            <Route path='/signin' element={<Login onLoginSubmit={handleLoginSubmit} />}></Route>
+            <Route path='*' element={<PageNotFound />}></Route>
+          </Routes>
+          :
+          null}
         {routesForFooter.includes(location.pathname) ?
           <Footer />
           : null}

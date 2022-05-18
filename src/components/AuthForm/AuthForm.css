@@ -107,6 +107,10 @@
     min-height: 12px;
 }
 
+.form__error_type_search {
+    min-height: 12px;
+}
+
 @media screen and (max-width: 1279px) {
     .auth {
         min-height: 1024px;

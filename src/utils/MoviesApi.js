@@ -1,4 +1,4 @@
-class MainApi {
+class MoviesApi {
     constructor({ url }) {
         this.url = url;
     }
@@ -16,12 +16,8 @@ class MainApi {
         return `Bearer ${localStorage.getItem('token')}`;
     }
 
-    getCards = () => {
-        return fetch(`${this.url}/cards`, {
-            headers: {
-                authorization: this.getToken(),
-            }
-        })
+    getMovies = () => {
+        return fetch(`${this.url}`)
             .then(this._getResponseData);
     }
 
@@ -103,8 +99,8 @@ class MainApi {
 }
 
 //const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:3001';
-const mainApi = new MainApi({
-    url: 'https://api.movies.hubkina.nomoredomains.work',
+const moviesApi = new MoviesApi({
+    url: 'https://api.nomoreparties.co/beatfilm-movies',
 });
 
-export default mainApi;
+export default moviesApi;

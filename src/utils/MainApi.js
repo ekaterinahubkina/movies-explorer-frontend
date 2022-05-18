@@ -58,7 +58,8 @@ class MainApi {
                 email: data.email
             })
         })
-            .then(this._getResponseData);
+            .then(this._getResponseData)
+            .catch(err => console.log(err))
     }
 
     tokenCheck() {
@@ -69,7 +70,7 @@ class MainApi {
                 "Authorization": this.getToken()
             }
         })
-            .then(this._getResponseData);
+            .then(this._getResponseData)
     }
 }
 
