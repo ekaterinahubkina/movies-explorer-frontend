@@ -2,6 +2,12 @@
     max-width: 1280px;
     margin: auto;
 }
+.movies__nothing-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 496px);
+}
 
 @media screen and (max-width: 1279px) {
     .movies__wrapper {

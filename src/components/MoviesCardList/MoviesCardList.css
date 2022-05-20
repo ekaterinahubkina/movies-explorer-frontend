@@ -2,13 +2,16 @@
     box-sizing: border-box;
     width: calc(100% - 2 * 70px);
     min-height: calc(100vh - 488px);
-    max-height: 1315px;
     margin: 0 auto;
     padding: 70px 0 10px;
     display: grid;
     grid-template-columns: repeat(3, minmax(364px, 1fr));
     grid-column-gap: 18px;
     grid-row-gap: 37px;
+}
+
+.movies-card-list span {
+    text-align: center;
 }
 
 .more-btn-container {

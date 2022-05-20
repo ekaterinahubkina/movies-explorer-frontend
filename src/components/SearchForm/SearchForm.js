@@ -2,11 +2,18 @@ import { useState } from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
 
-const SearchForm = ({ searchMessage, onSearchInputChange, onSearchSubmit, isSearchCheckboxChecked, onSearchCheckboxChange }) => {
+const SearchForm = ({ onSearchSubmit }) => {
     const [error, setError] = useState('');
+    const [searchMessage, setSearchMessage] = useState('');
+    const [isChecked, setIsChecked] = useState(false);
+
     const handleChange = (event) => {
         setError('');
-        onSearchInputChange(event.target.value);
+        setSearchMessage(event.target.value);
+    }
+
+    const handleCheckboxChange = () => {
+        setIsChecked(!isChecked)
     }
 
     const handleSubmit = (event) => {
@@ -14,7 +21,7 @@ const SearchForm = ({ searchMessage, onSearchInputChange, onSearchSubmit, isSear
         if (searchMessage === '') {
             setError('Нужно ввести ключевое слово')
         } else {
-            onSearchSubmit();
+            onSearchSubmit(searchMessage, isChecked);
             setError('');
         }
     }
@@ -29,7 +36,7 @@ const SearchForm = ({ searchMessage, onSearchInputChange, onSearchSubmit, isSear
                 </div>
                 <span className='form__error form__error_type_search'>{error}</span>
                 <div className='search__checkbox-container'>
-                    <FilterCheckbox isSearchCheckboxChecked={isSearchCheckboxChecked} onSearchCheckboxChange={onSearchCheckboxChange} />
+                    <FilterCheckbox isChecked={isChecked} onCheckboxChange={handleCheckboxChange} />
                     <p>Короткометражки</p>
                 </div>
 

@@ -4,7 +4,7 @@ import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Profile from '../Profile/Profile';
@@ -23,9 +23,8 @@ function App() {
   const [currentWidth, setCurrentWidth] = useState(window.innerWidth);
   const [isUserChecked, setIsUserChecked] = useState(false);
   const [movies, setMovies] = useState([]);
-  const [filteredMovies, setFilteredMovies] = useState([]);
-  const [searchMessage, setSearchMessage] = useState('');
-  const [isSearchCheckboxChecked, setIsSearchCheckboxChecked] = useState(false);
+  const [numberOfCardsToRender, setNumberOfCardsToRender] = useState(0);
+  const [numberOfCardsToAdd, setNumberOfCardsToAdd] = useState(0);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -37,13 +36,14 @@ function App() {
       .then(() => {
         setIsLoggedIn(true);
         setIsUserChecked(true);
+        console.log('user Checked')
       })
       .catch(err => {
         console.log(err);
         setIsUserChecked(true);
         localStorage.removeItem('token');
       })
-  }, [isUserChecked])
+  }, [])
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -52,54 +52,41 @@ function App() {
     mainApi.getUserData()
       .then(res => {
         setCurrentUser(res);
+        console.log('got current user')
       })
       .catch(err => console.log(err));
   }, [isLoggedIn])
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     return;
+  //   }
+  //   moviesApi.getMovies()
+  //     .then((res) => {
+  //       setMovies(res);
+  //     })
+  //     .catch(err => console.log(err))
+  // }, [isLoggedIn])
+  // поиск фильмов
+
+  const getMovies = useCallback(() => {
     moviesApi.getMovies()
       .then((res) => {
         setMovies(res);
       })
-      .catch(err => console.log(err))
-  }, [isLoggedIn])
-  // поиск фильмов
-
-  const handleSearchInputChange = (str) => {
-    setSearchMessage(str);
-    console.log(searchMessage);
-  }
-
-  const handleSearchCheckboxChange = () => {
-    setIsSearchCheckboxChecked(!isSearchCheckboxChecked);
-  }
-
-  const filterMovies = (arr, str) => {
-    let filteredMovies = [];
-    filteredMovies = arr.filter((item) => {
-      const nameRuToLowerCase = item.nameRU.toLowerCase();
-      const searchMessageToLowerCase = str.toLowerCase();
-      return nameRuToLowerCase.includes(searchMessageToLowerCase);
-    })
-    return isSearchCheckboxChecked ?
-      filteredMovies.filter((item) => {
-        return item.duration <= 40;
-      })
-      :
-      filteredMovies;
-  }
+      .catch(err => console.log(err));
+  }, [])
 
   const handleMoviesSearchSumit = () => {
-    setFilteredMovies(filterMovies(movies, searchMessage));
+    getMovies();
   }
-  console.log(filteredMovies);
 
   // служебные
   const resizeHandler = () => {
-    setCurrentWidth(window.innerWidth);
+    setTimeout(() => {
+      setCurrentWidth(window.innerWidth);
+    }, 1000000)
+    
   }
 
   const handleBurgerMenuClick = () => {
@@ -112,8 +99,39 @@ function App() {
 
   useEffect(() => {
     window.addEventListener('resize', resizeHandler);
+    return window.removeEventListener('resize', resizeHandler);
+  }, [])
+
+  useMemo(() => {
+    let res;
+    let add;
+    switch (true) {
+      case currentWidth >= 1280:
+        res = 12;
+        add = 3;
+        break;
+      case currentWidth >= 768:
+        res = 8;
+        add = 2;
+        break;
+      case currentWidth >= 320:
+        res = 5;
+        add = 2;
+        break;
+      default:
+        res = 6;
+        add = 3;
+        break;
+    }
     console.log(currentWidth);
-  }, [currentWidth])
+    setNumberOfCardsToRender(res);
+    setNumberOfCardsToAdd(add);
+  }, [currentWidth]
+  );
+
+  
+
+
 
 
   // регистрация и авторизация 
@@ -144,7 +162,7 @@ function App() {
     localStorage.removeItem('token');
     setCurrentUser({});
   }
-  console.log(filteredMovies);
+
   const handleUpdateUserInfo = ({ name, email }) => {
     mainApi.editUserData({ name, email })
       .then((res) => {
@@ -152,6 +170,7 @@ function App() {
       })
       .catch(err => console.log(err))
   }
+  console.log(movies)
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -171,20 +190,17 @@ function App() {
               path="/movies"
               element={
                 <ProtectedRoute loggedIn={isLoggedIn}>
-                  <Movies movies={filteredMovies}
-                    location={location}
-                    searchMessage={searchMessage}
-                    onSearchInputChange={handleSearchInputChange}
-                    onSearchSubmit={handleMoviesSearchSumit}
-                    isSearchCheckboxChecked={isSearchCheckboxChecked}
-                    onSearchCheckboxChange={handleSearchCheckboxChange} />
+                  <Movies movies={movies}
+                  onSearchSubmit={handleMoviesSearchSumit}
+                    numberOfCardsToRender={numberOfCardsToRender}
+                    numberOfCardsToAdd={numberOfCardsToAdd} />
                 </ProtectedRoute>
               } />
             <Route
               path="/saved-movies"
               element={
                 <ProtectedRoute loggedIn={isLoggedIn}>
-                  <SavedMovies location={location} searchMessage={searchMessage} onSearchInputChange={handleSearchInputChange} />
+                  <SavedMovies location={location} />
                 </ProtectedRoute>
               } />
             <Route

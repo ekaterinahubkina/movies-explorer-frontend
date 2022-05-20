@@ -6,10 +6,10 @@ const MoviesCardList = ({ location, children }) => {
             <section className='movies-card-list'>
                 {children}
             </section>
-            {location.pathname === '/movies' && 
+            {/* {location.pathname === '/movies' && 
             <div className='more-btn-container'>
                 <button className='more-btn'>Ещё</button>
-            </div>}
+            </div>} */}
         </>
 
     )

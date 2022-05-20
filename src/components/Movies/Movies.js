@@ -2,23 +2,53 @@ import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import MoviesCard from '../MoviesCard/MoviesCard';
+import { useState } from 'react';
 
-function Movies({ movies, location, searchMessage, onSearchInputChange, onSearchSubmit, isSearchCheckboxChecked, onSearchCheckboxChange }) {
+function Movies({ movies, onSearchSubmit, numberOfCardsToRender, numberOfCardsToAdd }) {
+
+    const [filteredMovies, setFilteredMovies] = useState([]);
+    const [cardsToRender, setCardsToRender] = useState(numberOfCardsToRender);
+
+    const filterMovies = (arr, str, checkboxStatus) => {
+        const filteredMovies = arr.filter((item) => {
+            const nameRuToLowerCase = item.nameRU.toLowerCase();
+            const searchMessageToLowerCase = str.toLowerCase();
+            return nameRuToLowerCase.includes(searchMessageToLowerCase);
+        })
+        const filteredShortMovies = filteredMovies.filter((item) => item.duration <= 40);
+        return checkboxStatus ? filteredShortMovies : filteredMovies;
+    }
+    const handleSearch = (message, isChecked) => {
+        onSearchSubmit();
+        const result = filterMovies(movies, message, isChecked);
+        setFilteredMovies(result);
+    }
+    const handleButtonMoreClick = () => {
+        setCardsToRender(cardsToRender + numberOfCardsToAdd)
+    }
+
     return (
         <section className='movies'>
             <div className='movies__wrapper'>
-                <SearchForm searchMessage={searchMessage}
-                    onSearchInputChange={onSearchInputChange}
-                    onSearchSubmit={onSearchSubmit}
-                    isSearchCheckboxChecked={isSearchCheckboxChecked}
-                    onSearchCheckboxChange={onSearchCheckboxChange} />
-                <MoviesCardList location={location}>
-                    {movies.map((item) => (
-                        <MoviesCard card={item} {...item} key={item.id} location={location} />
-                    ))}
-                </MoviesCardList>
+                <SearchForm onSearchSubmit={handleSearch} />
+                {filteredMovies.length === 0 ?
+                    <span className='movies__nothing-found'>Ничего не найдено</span>
+                    :
+                    <>
+                        <MoviesCardList>
+                            {filteredMovies.slice(0, cardsToRender).map((item) => (
+                                <MoviesCard card={item} {...item} key={item.id} />
+                            ))}
+                        </MoviesCardList>
+                        {filteredMovies.length > filteredMovies.slice(0, numberOfCardsToRender).length && filteredMovies.length !== cardsToRender ?
+                            <div className='more-btn-container'>
+                                <button className='more-btn' onClick={handleButtonMoreClick}>Ещё</button>
+                            </div>
+                            :
+                            null}
+                    </>
+                }
             </div>
-
         </section>
     )
 }

@@ -1,10 +1,14 @@
+import { useLocation } from 'react-router-dom';
 import './MoviesCard.css';
 
-const MoviesCard = ({ card, location }) => {
-const serverUrl = 'https://api.nomoreparties.co';
-const movieDuration = (min) => {
-    return `${Math.floor(min / 60)}ч ${min % 60}мин`;
-}
+const MoviesCard = ({ card }) => {
+
+    const serverUrl = 'https://api.nomoreparties.co';
+    const movieDuration = (min) => {
+        return `${Math.floor(min / 60)}ч ${min % 60}мин`;
+    }
+
+    const location = useLocation();
     return (
         <article className='movies-card'>
             <a href={card.trailerLink} target='blank'><img className='movies-card__image' src={serverUrl + card.image.url} alt={card.nameRU}></img></a>
