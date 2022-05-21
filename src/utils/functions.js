@@ -1,4 +1,4 @@
- const filterMovies = (arr, str, checkboxStatus) => {
+const filterMovies = (arr, str, checkboxStatus) => {
     const filteredMovies = arr.filter((item) => {
         const nameRuToLowerCase = item.nameRU.toLowerCase();
         const searchMessageToLowerCase = str.toLowerCase();
@@ -8,13 +8,6 @@
     return checkboxStatus ? filteredShortMovies : filteredMovies;
 }
 
-export default filterMovies;
 
-// const resetForm = useCallback(
-//     (newValues = {}, newErrors = {}, newIsValid = false) => {
-//         setValues(newValues);
-//         setErrors(newErrors);
-//         setIsValid(newIsValid);
-//     },
-//     [setValues, setErrors, setIsValid]
-// );
+
+export default filterMovies;

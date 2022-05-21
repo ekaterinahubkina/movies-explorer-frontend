@@ -25,6 +25,8 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [numberOfCardsToRender, setNumberOfCardsToRender] = useState(0);
   const [numberOfCardsToAdd, setNumberOfCardsToAdd] = useState(0);
+  const [savedMovies, setSavedMovies] = useState([]);
+  const [savedMoviesIds, setSavedMoviesIds] = useState([]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -56,6 +58,17 @@ function App() {
       })
       .catch(err => console.log(err));
   }, [isLoggedIn])
+
+  useEffect(() => {
+    mainApi.getSavedMovies()
+    .then((res) => {
+        setSavedMovies(res);
+        setSavedMoviesIds(res.map(item => item.movieId));
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+}, [])
 
   // useEffect(() => {
   //   if (!isLoggedIn) {
@@ -130,11 +143,34 @@ function App() {
   }, [currentWidth]
   );
 
+  // сохранение карточек 
+  const handleSaveMovies = (movie) => {
+    return mainApi.addMovieToSaved(movie)
+      .then((newMovie) => {
+        console.log(newMovie);
+        setSavedMovies([newMovie, ...savedMovies]);
+        setSavedMoviesIds([newMovie.movieId, ...savedMoviesIds])
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
 
+  const handleDeleteMoviesFromSaved = (movie) => {
+    return mainApi.deleteFromSaved(movie)
+    .then((res) => {
+      console.log(res);
+      setSavedMovies(state => state.filter(el => el._id !== res._id))
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
 
-
-
-
+const handleDislikeMovie = (id) => {
+  const movieToDelete = savedMovies.find((el) => el.movieId === id);
+  handleDeleteMoviesFromSaved(movieToDelete);
+}
   // регистрация и авторизация 
   const handleRegisterSubmit = ({ name, password, email }) => {
     mainApi.register({ name, password, email })
@@ -194,14 +230,19 @@ function App() {
                   <Movies movies={movies}
                     onSearchSubmit={handleMoviesSearchSumit}
                     numberOfCardsToRender={numberOfCardsToRender}
-                    numberOfCardsToAdd={numberOfCardsToAdd} />
+                    numberOfCardsToAdd={numberOfCardsToAdd}
+                    //onMovieLike={handleMovieLike}
+                    onSaveMovie={handleSaveMovies}
+                    onDeleteMovie={handleDeleteMoviesFromSaved}
+                    savedMoviesIds={savedMoviesIds}
+                    onDislikeMovie={handleDislikeMovie} />
                 </ProtectedRoute>
               } />
             <Route
               path="/saved-movies"
               element={
                 <ProtectedRoute loggedIn={isLoggedIn}>
-                  <SavedMovies location={location} />
+                  <SavedMovies savedMovies={savedMovies} onDeleteMovie={handleDeleteMoviesFromSaved} savedMoviesIds={savedMoviesIds} />
                 </ProtectedRoute>
               } />
             <Route

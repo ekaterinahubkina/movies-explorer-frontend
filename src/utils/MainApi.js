@@ -62,6 +62,50 @@ class MainApi {
             .catch(err => console.log(err))
     }
 
+    getSavedMovies() {
+        return fetch(`${this.url}/movies`, {
+            headers: {
+                authorization: this.getToken()
+            }
+        })
+            .then(this._getResponseData);
+    }
+
+    addMovieToSaved(data) {
+        return fetch(`${this.url}/movies`, {
+            method: 'POST',
+            headers: {
+                authorization: this.getToken(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                country: data.country || 'Не указано',
+                director: data.director || 'Не указано',
+                duration: data.duration || 'Не указано',
+                year: data.year || 'Не указано',
+                description: data.description || 'Не указано',
+                image: `https://api.nomoreparties.co${data.image.url}` || 'Не указано',
+                trailerLink: data.trailerLink || 'Не указано',
+                thumbnail: `https://api.nomoreparties.co${data.image.formats.thumbnail.url}` || 'Не указано',
+                movieId: data.id,
+                nameRU: data.nameRU || 'Не указано',
+                nameEN: data.nameEN || 'Не указано',
+            })
+        })
+            .then(this._getResponseData);
+    }
+
+    deleteFromSaved(data) {
+        return fetch(`${this.url}/movies/${data._id}`, {
+            method: 'DELETE',
+            headers: {
+                authorization: this.getToken(),
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(this._getResponseData);
+    }
+
     tokenCheck() {
         return fetch(`${this.url}/users/me`, {
             method: 'GET',

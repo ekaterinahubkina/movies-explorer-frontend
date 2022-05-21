@@ -1,11 +1,13 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
 
 const SearchForm = ({ onSearchSubmit }) => {
+    const location = useLocation();
     const [error, setError] = useState('');
-    const [searchMessage, setSearchMessage] = useState('');
-    const [isChecked, setIsChecked] = useState(false);
+    const [searchMessage, setSearchMessage] = useState(location.pathname === '/movies' ? localStorage.getItem('searchMessage') || '' : '');
+    const [isChecked, setIsChecked] = useState(location.pathname === '/movies' ? JSON.parse(localStorage.getItem('checkboxStatus')) || false : false);
 
     const handleChange = (event) => {
         setError('');
@@ -24,6 +26,8 @@ const SearchForm = ({ onSearchSubmit }) => {
             onSearchSubmit(searchMessage, isChecked);
             setError('');
         }
+        location.pathname === '/movies' && localStorage.setItem('searchMessage', searchMessage);
+        location.pathname === '/movies' && localStorage.setItem('checkboxStatus', JSON.stringify(isChecked));
     }
 
 
