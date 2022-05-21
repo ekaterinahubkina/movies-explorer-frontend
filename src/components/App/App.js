@@ -4,7 +4,7 @@ import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Profile from '../Profile/Profile';
@@ -69,16 +69,17 @@ function App() {
   // }, [isLoggedIn])
   // поиск фильмов
 
-  const getMovies = useCallback(() => {
-    moviesApi.getMovies()
+  const getMovies = (filterCallback) => {
+    return moviesApi.getMovies()
       .then((res) => {
         setMovies(res);
+        filterCallback(res);
       })
       .catch(err => console.log(err));
-  }, [])
+  }
 
-  const handleMoviesSearchSumit = () => {
-    getMovies();
+  const handleMoviesSearchSumit = (filterCallback) => {
+    getMovies(filterCallback);
   }
 
   // служебные
@@ -86,7 +87,7 @@ function App() {
     setTimeout(() => {
       setCurrentWidth(window.innerWidth);
     }, 1000000)
-    
+
   }
 
   const handleBurgerMenuClick = () => {
@@ -129,7 +130,7 @@ function App() {
   }, [currentWidth]
   );
 
-  
+
 
 
 
@@ -191,7 +192,7 @@ function App() {
               element={
                 <ProtectedRoute loggedIn={isLoggedIn}>
                   <Movies movies={movies}
-                  onSearchSubmit={handleMoviesSearchSumit}
+                    onSearchSubmit={handleMoviesSearchSumit}
                     numberOfCardsToRender={numberOfCardsToRender}
                     numberOfCardsToAdd={numberOfCardsToAdd} />
                 </ProtectedRoute>

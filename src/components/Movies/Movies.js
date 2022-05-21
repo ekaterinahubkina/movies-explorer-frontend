@@ -19,9 +19,11 @@ function Movies({ movies, onSearchSubmit, numberOfCardsToRender, numberOfCardsTo
         return checkboxStatus ? filteredShortMovies : filteredMovies;
     }
     const handleSearch = (message, isChecked) => {
-        onSearchSubmit();
-        const result = filterMovies(movies, message, isChecked);
-        setFilteredMovies(result);
+        onSearchSubmit((movies) => {
+            setFilteredMovies(filterMovies(movies, message, isChecked));
+        });
+        // const result = filterMovies(movies, message, isChecked);
+
     }
     const handleButtonMoreClick = () => {
         setCardsToRender(cardsToRender + numberOfCardsToAdd)
