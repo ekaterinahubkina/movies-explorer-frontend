@@ -4,30 +4,38 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import { useState } from 'react';
 import filterMovies from '../../utils/functions';
+import Preloader from '../Preloader/Preloader';
 
-function Movies({ movies, onSearchSubmit, numberOfCardsToRender, numberOfCardsToAdd, onSaveMovie, onDeleteMovie, savedMoviesIds, onDislikeMovie }) {
+function Movies({ onSearchSubmit, numberOfCardsToRender, numberOfCardsToAdd, onSaveMovie, savedMoviesIds, onDislikeMovie, isDataLoading, isServerError }) {
 
     const [filteredMovies, setFilteredMovies] = useState(JSON.parse(localStorage.getItem('filteredMovies')) || []);
+    const [shortFilteredMovies, setShortFilterseMovies] = useState(JSON.parse(localStorage.getItem('shortFilteredMovies')) || []);
+    const [isCheckbobChecked, setIsCheckboxChecked] = useState(JSON.parse(localStorage.getItem('checkboxStatus')) || false);
     const [cardsToRender, setCardsToRender] = useState(numberOfCardsToRender);
+    const [isSeachHandeled, setIsSearchHandled] = useState(false);
 
-    // const filterMovies = (arr, str, checkboxStatus) => {
-    //     const filteredMovies = arr.filter((item) => {
-    //         const nameRuToLowerCase = item.nameRU.toLowerCase();
-    //         const searchMessageToLowerCase = str.toLowerCase();
-    //         return nameRuToLowerCase.includes(searchMessageToLowerCase);
-    //     })
-    //     const filteredShortMovies = filteredMovies.filter((item) => item.duration <= 40);
-    //     return checkboxStatus ? filteredShortMovies : filteredMovies;
-    // }
+    const handleCheckboxChange = () => {
+        setIsCheckboxChecked(!isCheckbobChecked)
+    }
 
-    const handleSearch = (message, isChecked) => {
+    const handleSearch = (message) => {
+        setCardsToRender(numberOfCardsToRender);
         onSearchSubmit((movies) => {
-            const result = filterMovies(movies, message, isChecked)
+            const result = filterMovies(movies, message)
             setFilteredMovies(result);
-            localStorage.setItem('filteredMovies', JSON.stringify(result));
+            const resultShort = result.filter((item) => item.duration <= 40);
+            setShortFilterseMovies(resultShort);
+            if (isCheckbobChecked) {
+                localStorage.setItem('shortFilteredMovies', JSON.stringify(resultShort));
+                localStorage.removeItem('filteredMovies');
+            } else {
+                localStorage.setItem('filteredMovies', JSON.stringify(result));
+                localStorage.removeItem('shortFilteredMovies');
+            }
+            localStorage.setItem('checkboxStatus', JSON.stringify(isCheckbobChecked));
         });
-        
 
+        setIsSearchHandled(true);
     }
 
     const handleButtonMoreClick = () => {
@@ -41,25 +49,55 @@ function Movies({ movies, onSearchSubmit, numberOfCardsToRender, numberOfCardsTo
     return (
         <section className='movies'>
             <div className='movies__wrapper'>
-                <SearchForm onSearchSubmit={handleSearch} />
-                {filteredMovies.length === 0 ?
-                    <span className='movies__nothing-found'>Ничего не найдено</span>
+                <SearchForm isCheckbobChecked={isCheckbobChecked} onCheckboxChange={handleCheckboxChange} onSearchSubmit={handleSearch} />
+                {isDataLoading ?
+                    <Preloader />
                     :
                     <>
-                        <MoviesCardList>
-                            {filteredMovies.slice(0, cardsToRender).map((item) => (
-                                <MoviesCard card={item} {...item} key={item.id} handleMovieCardLike={handleMovieCardLike} savedMoviesIds={savedMoviesIds}
-                                    onDislikeMovie={onDislikeMovie} />
-                            ))}
-                        </MoviesCardList>
-                        {filteredMovies.length > filteredMovies.slice(0, numberOfCardsToRender).length && filteredMovies.length !== cardsToRender ?
-                            <div className='more-btn-container'>
-                                <button className='more-btn' onClick={handleButtonMoreClick}>Ещё</button>
-                            </div>
+                        {isCheckbobChecked ?
+                            <>{(isSeachHandeled && shortFilteredMovies.length === 0) && <span className='movies__nothing-found'>Ничего не найдено</span>}</>
                             :
-                            null}
+                            <>{(isSeachHandeled && filteredMovies.length === 0) && <span className='movies__nothing-found'>Ничего не найдено</span>}</>
+                        }
+                        <MoviesCardList>
+                            {isCheckbobChecked ?
+                                <>
+                                    {shortFilteredMovies.slice(0, cardsToRender).map((item) => (
+                                        <MoviesCard card={item} {...item} key={item.id} handleMovieCardLike={handleMovieCardLike} savedMoviesIds={savedMoviesIds}
+                                            onDislikeMovie={onDislikeMovie} />
+                                    ))}
+                                </>
+                                :
+                                <>
+                                    {filteredMovies.slice(0, cardsToRender).map((item) => (
+                                        <MoviesCard card={item} {...item} key={item.id} handleMovieCardLike={handleMovieCardLike} savedMoviesIds={savedMoviesIds}
+                                            onDislikeMovie={onDislikeMovie} />
+                                    ))}
+                                </>}
+
+                        </MoviesCardList>
+                        {isServerError && <span className='movies__server-error'>Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз</span>}
+                        {isCheckbobChecked ?
+                            <>
+                                {shortFilteredMovies.length > shortFilteredMovies.slice(0, numberOfCardsToRender).length && shortFilteredMovies.length >= cardsToRender ?
+                                    <div className='more-btn-container'>
+                                        <button className='more-btn' onClick={handleButtonMoreClick}>Ещё</button>
+                                    </div>
+                                    :
+                                    null}
+                            </>
+                            :
+                            <>
+                                {filteredMovies.length > filteredMovies.slice(0, numberOfCardsToRender).length && filteredMovies.length >= cardsToRender ?
+                                    <div className='more-btn-container'>
+                                        <button className='more-btn' onClick={handleButtonMoreClick}>Ещё</button>
+                                    </div>
+                                    :
+                                    null}
+                            </>}
                     </>
                 }
+
             </div>
         </section>
     )

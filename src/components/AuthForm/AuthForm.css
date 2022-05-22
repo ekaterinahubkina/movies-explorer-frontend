@@ -103,6 +103,13 @@
     margin-bottom: 5px;
 }
 
+.form__server-error {
+    display: block;
+    text-align: center;
+    margin: 0 auto 20px;
+    color: #FF4062;
+}
+
 .form__error_type_profile {
     min-height: 12px;
 }

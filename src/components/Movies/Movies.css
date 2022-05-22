@@ -1,5 +1,6 @@
 .movies__wrapper {
     max-width: 1280px;
+    min-height: calc(100vh - 176px);
     margin: auto;
 }
 .movies__nothing-found {
@@ -7,6 +8,13 @@
     align-items: center;
     justify-content: center;
     min-height: calc(100vh - 496px);
+}
+
+.movies__server-error {
+    display: block;
+    margin: auto;
+    text-align: center;
+    color: red;
 }
 
 @media screen and (max-width: 1279px) {

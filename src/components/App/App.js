@@ -19,7 +19,6 @@ import moviesApi from '../../utils/MoviesApi';
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentWidth, setCurrentWidth] = useState(window.innerWidth);
   const [isUserChecked, setIsUserChecked] = useState(false);
   const [movies, setMovies] = useState([]);
@@ -27,6 +26,10 @@ function App() {
   const [numberOfCardsToAdd, setNumberOfCardsToAdd] = useState(0);
   const [savedMovies, setSavedMovies] = useState([]);
   const [savedMoviesIds, setSavedMoviesIds] = useState([]);
+  const [isDataLoading, setIsDataLoading] = useState(false);
+  const [isServerError, setIsServerError] = useState(false);
+  const [isRequestOk, setIsRequestOk] = useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -38,7 +41,7 @@ function App() {
       .then(() => {
         setIsLoggedIn(true);
         setIsUserChecked(true);
-        console.log('user Checked')
+        console.log('эффект check token')
       })
       .catch(err => {
         console.log(err);
@@ -51,44 +54,41 @@ function App() {
     if (!isLoggedIn) {
       return;
     }
-    mainApi.getUserData()
-      .then(res => {
-        setCurrentUser(res);
-        console.log('got current user')
+    Promise.all([mainApi.getUserData(), mainApi.getSavedMovies()])
+      .then(([user, movies]) => {
+        setCurrentUser(user);
+        console.log('got current user', user)
+        setSavedMovies(movies.filter((item) => item.owner === user._id));
+        setSavedMoviesIds(movies.filter((item) => item.owner === user._id).map(item => item.movieId));
+        console.log('got saved movies', movies.filter((item) => item.owner === user._id));
       })
-      .catch(err => console.log(err));
+      .catch((err) => {
+        setIsServerError(true);
+        console.log(err);
+      })
+      .finally(() => {
+        setIsServerError(false);
+      })
   }, [isLoggedIn])
 
-  useEffect(() => {
-    mainApi.getSavedMovies()
-    .then((res) => {
-        setSavedMovies(res);
-        setSavedMoviesIds(res.map(item => item.movieId));
-    })
-    .catch((err) => {
-        console.log(err);
-    })
-}, [])
-
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     return;
-  //   }
-  //   moviesApi.getMovies()
-  //     .then((res) => {
-  //       setMovies(res);
-  //     })
-  //     .catch(err => console.log(err))
-  // }, [isLoggedIn])
   // поиск фильмов
 
   const getMovies = (filterCallback) => {
+    setIsDataLoading(true);
     return moviesApi.getMovies()
+
       .then((res) => {
+
         setMovies(res);
         filterCallback(res);
       })
-      .catch(err => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setIsServerError(true);
+      })
+      .finally(() => {
+        setIsDataLoading(false)
+      })
   }
 
   const handleMoviesSearchSumit = (filterCallback) => {
@@ -100,15 +100,6 @@ function App() {
     setTimeout(() => {
       setCurrentWidth(window.innerWidth);
     }, 1000000)
-
-  }
-
-  const handleBurgerMenuClick = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  }
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
   }
 
   useEffect(() => {
@@ -152,33 +143,49 @@ function App() {
         setSavedMoviesIds([newMovie.movieId, ...savedMoviesIds])
       })
       .catch((err) => {
+        setIsServerError(true);
         console.log(err);
+      })
+      .finally(() => {
+        setIsServerError(false);
       })
   }
 
   const handleDeleteMoviesFromSaved = (movie) => {
     return mainApi.deleteFromSaved(movie)
-    .then((res) => {
-      console.log(res);
-      setSavedMovies(state => state.filter(el => el._id !== res._id))
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+      .then((res) => {
+        console.log(res);
+        setSavedMovies(state => state.filter(el => el._id !== res._id))
+      })
+      .catch((err) => {
+        setIsServerError(true);
+        console.log(err);
+      })
+      .finally(() => {
+        setIsServerError(false);
+      })
   }
 
-const handleDislikeMovie = (id) => {
-  const movieToDelete = savedMovies.find((el) => el.movieId === id);
-  handleDeleteMoviesFromSaved(movieToDelete);
-}
+  const handleDislikeMovie = (id) => {
+    const movieToDelete = savedMovies.find((el) => el.movieId === id);
+    handleDeleteMoviesFromSaved(movieToDelete);
+  }
   // регистрация и авторизация 
+
+  const handleInfoTooltipOpen = () => {
+    setIsInfoTooltipOpen(false)
+  }
   const handleRegisterSubmit = ({ name, password, email }) => {
     mainApi.register({ name, password, email })
       .then(() => {
-        navigate('/signin');
+        handleLoginSubmit({password: password, email: email})
       })
       .catch((err) => {
+        setIsServerError(true);
         console.log(err);
+      })
+      .finally(() => {
+        setIsServerError(false);
       })
   }
 
@@ -190,22 +197,32 @@ const handleDislikeMovie = (id) => {
         navigate('/movies');
       })
       .catch((err) => {
+        setIsServerError(true);
         console.log(err);
+      })
+      .finally(() => {
+        setIsServerError(false);
       })
   }
 
   const handleExit = () => {
     setIsLoggedIn(false);
     localStorage.removeItem('token');
+    localStorage.clear();
     setCurrentUser({});
   }
 
   const handleUpdateUserInfo = ({ name, email }) => {
     mainApi.editUserData({ name, email })
       .then((res) => {
+        setIsInfoTooltipOpen(true);
+        setIsRequestOk(!isRequestOk);
         setCurrentUser(res);
+        
       })
-      .catch(err => console.log(err))
+      .catch((err) => {
+        console.log(err);
+      })
   }
   console.log(movies)
 
@@ -214,11 +231,7 @@ const handleDislikeMovie = (id) => {
       <div className="App">
         {routesForHeader.includes(location.pathname) ?
           <Header
-            location={location}
-            currentWidth={currentWidth}
-            isMobileMenuOpen={isMobileMenuOpen}
-            onBurgerMenuClick={handleBurgerMenuClick}
-            onCloseMobileMenu={closeMobileMenu} />
+            loggedIn={isLoggedIn} />
           : null}
         {isUserChecked ?
           <Routes>
@@ -231,25 +244,35 @@ const handleDislikeMovie = (id) => {
                     onSearchSubmit={handleMoviesSearchSumit}
                     numberOfCardsToRender={numberOfCardsToRender}
                     numberOfCardsToAdd={numberOfCardsToAdd}
-                    //onMovieLike={handleMovieLike}
                     onSaveMovie={handleSaveMovies}
                     onDeleteMovie={handleDeleteMoviesFromSaved}
                     savedMoviesIds={savedMoviesIds}
-                    onDislikeMovie={handleDislikeMovie} />
+                    onDislikeMovie={handleDislikeMovie}
+                    isDataLoading={isDataLoading}
+                    isServerError={isServerError} />
                 </ProtectedRoute>
               } />
             <Route
               path="/saved-movies"
               element={
                 <ProtectedRoute loggedIn={isLoggedIn}>
-                  <SavedMovies savedMovies={savedMovies} onDeleteMovie={handleDeleteMoviesFromSaved} savedMoviesIds={savedMoviesIds} />
+                  <SavedMovies savedMovies={savedMovies} 
+                  onDeleteMovie={handleDeleteMoviesFromSaved} 
+                  savedMoviesIds={savedMoviesIds}
+                  isDataLoading={isDataLoading} />
                 </ProtectedRoute>
               } />
             <Route
               path="/profile"
               element={
                 <ProtectedRoute loggedIn={isLoggedIn}>
-                  <Profile loggedIn={isLoggedIn} onExit={handleExit} onUpdateUserInfo={handleUpdateUserInfo} />
+                  <Profile loggedIn={isLoggedIn} 
+                  onExit={handleExit} 
+                  onUpdateUserInfo={handleUpdateUserInfo} 
+                  isServerError={isServerError}
+                  isRequestOk={isRequestOk}
+                  isInfoTooltipOpen={isInfoTooltipOpen}
+                  onCloseInfoTooltip={handleInfoTooltipOpen} />
                 </ProtectedRoute>
               } />
             <Route path='/signup' element={<Register onRegisterSubmit={handleRegisterSubmit} />}></Route>

@@ -3,19 +3,20 @@ import { useLocation } from 'react-router-dom';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
 
-const SearchForm = ({ onSearchSubmit }) => {
+const SearchForm = ({ isCheckbobChecked, onCheckboxChange, onSearchSubmit }) => {
     const location = useLocation();
     const [error, setError] = useState('');
     const [searchMessage, setSearchMessage] = useState(location.pathname === '/movies' ? localStorage.getItem('searchMessage') || '' : '');
-    const [isChecked, setIsChecked] = useState(location.pathname === '/movies' ? JSON.parse(localStorage.getItem('checkboxStatus')) || false : false);
+    // const [isChecked, setIsChecked] = useState(location.pathname === '/movies' ? JSON.parse(localStorage.getItem('checkboxStatus')) || false : false);
 
     const handleChange = (event) => {
         setError('');
         setSearchMessage(event.target.value);
+
     }
 
     const handleCheckboxChange = () => {
-        setIsChecked(!isChecked)
+        onCheckboxChange();
     }
 
     const handleSubmit = (event) => {
@@ -23,11 +24,10 @@ const SearchForm = ({ onSearchSubmit }) => {
         if (searchMessage === '') {
             setError('Нужно ввести ключевое слово')
         } else {
-            onSearchSubmit(searchMessage, isChecked);
+            onSearchSubmit(searchMessage);
             setError('');
         }
         location.pathname === '/movies' && localStorage.setItem('searchMessage', searchMessage);
-        location.pathname === '/movies' && localStorage.setItem('checkboxStatus', JSON.stringify(isChecked));
     }
 
 
@@ -40,7 +40,7 @@ const SearchForm = ({ onSearchSubmit }) => {
                 </div>
                 <span className='form__error form__error_type_search'>{error}</span>
                 <div className='search__checkbox-container'>
-                    <FilterCheckbox isChecked={isChecked} onCheckboxChange={handleCheckboxChange} />
+                    <FilterCheckbox isChecked={isCheckbobChecked} onCheckboxChange={handleCheckboxChange} />
                     <p>Короткометражки</p>
                 </div>
 

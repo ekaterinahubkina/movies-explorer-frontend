@@ -24,8 +24,6 @@ const MoviesCard = ({ card, handleMovieCardLike, handleDeleteMovie, savedMoviesI
 
     useEffect(checkLikeStatus, [card.id, savedMoviesIds])
 
-    
-
     const deleteMovie = () => {
         handleDeleteMovie(card);
     }

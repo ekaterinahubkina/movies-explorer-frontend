@@ -1,7 +1,7 @@
 import './Navigation.css';
 import { Link, NavLink } from 'react-router-dom';
 
-const Navigation = ({ location }) => {
+const Navigation = ({ loggedIn }) => {
 
     const linkActiveClass = ({ isActive }) => {
         return `header__link ${isActive && 'header__link_active'}`;
@@ -10,7 +10,7 @@ const Navigation = ({ location }) => {
     return (
         <>
             {
-                location.pathname === '/' ?
+                !loggedIn ?
                     <div className='header__auth'>
                         <Link to='/signup' className='header__register'>Регистрация</Link>
                         <Link to='signin'><button className='header__login-btn'>Войти</button></Link>

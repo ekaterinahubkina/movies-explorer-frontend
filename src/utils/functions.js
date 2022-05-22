@@ -1,11 +1,12 @@
-const filterMovies = (arr, str, checkboxStatus) => {
+const filterMovies = (arr, str) => {
     const filteredMovies = arr.filter((item) => {
         const nameRuToLowerCase = item.nameRU.toLowerCase();
         const searchMessageToLowerCase = str.toLowerCase();
         return nameRuToLowerCase.includes(searchMessageToLowerCase);
     })
-    const filteredShortMovies = filteredMovies.filter((item) => item.duration <= 40);
-    return checkboxStatus ? filteredShortMovies : filteredMovies;
+    return filteredMovies;
+    // const filteredShortMovies = filteredMovies.filter((item) => item.duration <= 40);
+    // return checkboxStatus ? filteredShortMovies : filteredMovies;
 }
 
 
