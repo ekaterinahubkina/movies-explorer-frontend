@@ -5,8 +5,10 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 import { useState } from 'react';
 import filterMovies from '../../utils/functions';
 import Preloader from '../Preloader/Preloader';
+import InfoTooltip from '../InfoTooltip/InfoTooltip';
 
-function Movies({ onSearchSubmit, numberOfCardsToRender, numberOfCardsToAdd, onSaveMovie, savedMoviesIds, onDislikeMovie, isDataLoading, isServerError }) {
+function Movies({ onSearchSubmit, numberOfCardsToRender, numberOfCardsToAdd, onSaveMovie, savedMoviesIds,
+    onDislikeMovie, isDataLoading, isInfoTooltipOpen, onCloseInfoTooltip, isRequestOk }) {
 
     const [filteredMovies, setFilteredMovies] = useState(JSON.parse(localStorage.getItem('filteredMovies')) || []);
     const [shortFilteredMovies, setShortFilterseMovies] = useState(JSON.parse(localStorage.getItem('shortFilteredMovies')) || []);
@@ -47,59 +49,62 @@ function Movies({ onSearchSubmit, numberOfCardsToRender, numberOfCardsToAdd, onS
     }
 
     return (
-        <section className='movies'>
-            <div className='movies__wrapper'>
-                <SearchForm isCheckbobChecked={isCheckbobChecked} onCheckboxChange={handleCheckboxChange} onSearchSubmit={handleSearch} />
-                {isDataLoading ?
-                    <Preloader />
-                    :
-                    <>
-                        {isCheckbobChecked ?
-                            <>{(isSeachHandeled && shortFilteredMovies.length === 0) && <span className='movies__nothing-found'>Ничего не найдено</span>}</>
-                            :
-                            <>{(isSeachHandeled && filteredMovies.length === 0) && <span className='movies__nothing-found'>Ничего не найдено</span>}</>
-                        }
-                        <MoviesCardList>
+        <>
+            <section className='movies'>
+                <div className='movies__wrapper'>
+                    <SearchForm isCheckbobChecked={isCheckbobChecked} onCheckboxChange={handleCheckboxChange} onSearchSubmit={handleSearch} />
+                    {isDataLoading ?
+                        <Preloader />
+                        :
+                        <>
+                            {isCheckbobChecked ?
+                                <>{(isSeachHandeled && shortFilteredMovies.length === 0) && <span className='movies__nothing-found'>Ничего не найдено</span>}</>
+                                :
+                                <>{(isSeachHandeled && filteredMovies.length === 0) && <span className='movies__nothing-found'>Ничего не найдено</span>}</>
+                            }
+                            <MoviesCardList>
+                                {isCheckbobChecked ?
+                                    <>
+                                        {shortFilteredMovies.slice(0, cardsToRender).map((item) => (
+                                            <MoviesCard card={item} {...item} key={item.id} handleMovieCardLike={handleMovieCardLike} savedMoviesIds={savedMoviesIds}
+                                                onDislikeMovie={onDislikeMovie} />
+                                        ))}
+                                    </>
+                                    :
+                                    <>
+                                        {filteredMovies.slice(0, cardsToRender).map((item) => (
+                                            <MoviesCard card={item} {...item} key={item.id} handleMovieCardLike={handleMovieCardLike} savedMoviesIds={savedMoviesIds}
+                                                onDislikeMovie={onDislikeMovie} />
+                                        ))}
+                                    </>}
+
+                            </MoviesCardList>
+
                             {isCheckbobChecked ?
                                 <>
-                                    {shortFilteredMovies.slice(0, cardsToRender).map((item) => (
-                                        <MoviesCard card={item} {...item} key={item.id} handleMovieCardLike={handleMovieCardLike} savedMoviesIds={savedMoviesIds}
-                                            onDislikeMovie={onDislikeMovie} />
-                                    ))}
+                                    {shortFilteredMovies.length > shortFilteredMovies.slice(0, numberOfCardsToRender).length && shortFilteredMovies.length >= cardsToRender ?
+                                        <div className='more-btn-container'>
+                                            <button className='more-btn' onClick={handleButtonMoreClick}>Ещё</button>
+                                        </div>
+                                        :
+                                        null}
                                 </>
                                 :
                                 <>
-                                    {filteredMovies.slice(0, cardsToRender).map((item) => (
-                                        <MoviesCard card={item} {...item} key={item.id} handleMovieCardLike={handleMovieCardLike} savedMoviesIds={savedMoviesIds}
-                                            onDislikeMovie={onDislikeMovie} />
-                                    ))}
+                                    {filteredMovies.length > filteredMovies.slice(0, numberOfCardsToRender).length && filteredMovies.length >= cardsToRender ?
+                                        <div className='more-btn-container'>
+                                            <button className='more-btn' onClick={handleButtonMoreClick}>Ещё</button>
+                                        </div>
+                                        :
+                                        null}
                                 </>}
+                        </>
+                    }
 
-                        </MoviesCardList>
-                        {isServerError && <span className='movies__server-error'>Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз</span>}
-                        {isCheckbobChecked ?
-                            <>
-                                {shortFilteredMovies.length > shortFilteredMovies.slice(0, numberOfCardsToRender).length && shortFilteredMovies.length >= cardsToRender ?
-                                    <div className='more-btn-container'>
-                                        <button className='more-btn' onClick={handleButtonMoreClick}>Ещё</button>
-                                    </div>
-                                    :
-                                    null}
-                            </>
-                            :
-                            <>
-                                {filteredMovies.length > filteredMovies.slice(0, numberOfCardsToRender).length && filteredMovies.length >= cardsToRender ?
-                                    <div className='more-btn-container'>
-                                        <button className='more-btn' onClick={handleButtonMoreClick}>Ещё</button>
-                                    </div>
-                                    :
-                                    null}
-                            </>}
-                    </>
-                }
-
-            </div>
-        </section>
+                </div>
+            </section>
+            <InfoTooltip isOpen={isInfoTooltipOpen} onClose={onCloseInfoTooltip} isRequestOk={isRequestOk} />
+        </>
     )
 }
 

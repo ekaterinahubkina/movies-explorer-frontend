@@ -27,7 +27,6 @@ function App() {
   const [savedMovies, setSavedMovies] = useState([]);
   const [savedMoviesIds, setSavedMoviesIds] = useState([]);
   const [isDataLoading, setIsDataLoading] = useState(false);
-  const [isServerError, setIsServerError] = useState(false);
   const [isRequestOk, setIsRequestOk] = useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
 
@@ -72,15 +71,13 @@ function App() {
   const getMovies = (filterCallback) => {
     setIsDataLoading(true);
     return moviesApi.getMovies()
-
       .then((res) => {
-
         setMovies(res);
         filterCallback(res);
       })
       .catch((err) => {
         console.log(err);
-        setIsServerError(true);
+        setIsInfoTooltipOpen(true);
       })
       .finally(() => {
         setIsDataLoading(false)
@@ -139,11 +136,7 @@ function App() {
         setSavedMoviesIds([newMovie.movieId, ...savedMoviesIds])
       })
       .catch((err) => {
-        setIsServerError(true);
         console.log(err);
-      })
-      .finally(() => {
-        setIsServerError(false);
       })
   }
 
@@ -154,11 +147,7 @@ function App() {
         setSavedMovies(state => state.filter(el => el._id !== res._id))
       })
       .catch((err) => {
-        setIsServerError(true);
         console.log(err);
-      })
-      .finally(() => {
-        setIsServerError(false);
       })
   }
 
@@ -241,7 +230,9 @@ function App() {
                     savedMoviesIds={savedMoviesIds}
                     onDislikeMovie={handleDislikeMovie}
                     isDataLoading={isDataLoading}
-                    isServerError={isServerError} />
+                    isRequestOk={isRequestOk}
+                    isInfoTooltipOpen={isInfoTooltipOpen}
+                    onCloseInfoTooltip={handleInfoTooltipOpen} />
                 </ProtectedRoute>
               } />
             <Route
