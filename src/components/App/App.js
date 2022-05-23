@@ -63,11 +63,7 @@ function App() {
         console.log('got saved movies', movies.filter((item) => item.owner === user._id));
       })
       .catch((err) => {
-        setIsServerError(true);
         console.log(err);
-      })
-      .finally(() => {
-        setIsServerError(false);
       })
   }, [isLoggedIn])
 
@@ -173,19 +169,17 @@ function App() {
   // регистрация и авторизация 
 
   const handleInfoTooltipOpen = () => {
-    setIsInfoTooltipOpen(false)
+    setIsInfoTooltipOpen(false);
+    setIsRequestOk(false);
   }
   const handleRegisterSubmit = ({ name, password, email }) => {
     mainApi.register({ name, password, email })
       .then(() => {
-        handleLoginSubmit({password: password, email: email})
+        handleLoginSubmit({ password: password, email: email });
       })
       .catch((err) => {
-        setIsServerError(true);
         console.log(err);
-      })
-      .finally(() => {
-        setIsServerError(false);
+        setIsInfoTooltipOpen(true);
       })
   }
 
@@ -197,11 +191,8 @@ function App() {
         navigate('/movies');
       })
       .catch((err) => {
-        setIsServerError(true);
+        setIsInfoTooltipOpen(true);
         console.log(err);
-      })
-      .finally(() => {
-        setIsServerError(false);
       })
   }
 
@@ -215,12 +206,13 @@ function App() {
   const handleUpdateUserInfo = ({ name, email }) => {
     mainApi.editUserData({ name, email })
       .then((res) => {
-        setIsInfoTooltipOpen(true);
         setIsRequestOk(!isRequestOk);
+        setIsInfoTooltipOpen(true);
         setCurrentUser(res);
-        
+
       })
       .catch((err) => {
+        setIsInfoTooltipOpen(true);
         console.log(err);
       })
   }
@@ -256,27 +248,32 @@ function App() {
               path="/saved-movies"
               element={
                 <ProtectedRoute loggedIn={isLoggedIn}>
-                  <SavedMovies savedMovies={savedMovies} 
-                  onDeleteMovie={handleDeleteMoviesFromSaved} 
-                  savedMoviesIds={savedMoviesIds}
-                  isDataLoading={isDataLoading} />
+                  <SavedMovies savedMovies={savedMovies}
+                    onDeleteMovie={handleDeleteMoviesFromSaved}
+                    savedMoviesIds={savedMoviesIds}
+                    isDataLoading={isDataLoading} />
                 </ProtectedRoute>
               } />
             <Route
               path="/profile"
               element={
                 <ProtectedRoute loggedIn={isLoggedIn}>
-                  <Profile loggedIn={isLoggedIn} 
-                  onExit={handleExit} 
-                  onUpdateUserInfo={handleUpdateUserInfo} 
-                  isServerError={isServerError}
-                  isRequestOk={isRequestOk}
-                  isInfoTooltipOpen={isInfoTooltipOpen}
-                  onCloseInfoTooltip={handleInfoTooltipOpen} />
+                  <Profile loggedIn={isLoggedIn}
+                    onExit={handleExit}
+                    onUpdateUserInfo={handleUpdateUserInfo}
+                    isRequestOk={isRequestOk}
+                    isInfoTooltipOpen={isInfoTooltipOpen}
+                    onCloseInfoTooltip={handleInfoTooltipOpen} />
                 </ProtectedRoute>
               } />
-            <Route path='/signup' element={<Register onRegisterSubmit={handleRegisterSubmit} />}></Route>
-            <Route path='/signin' element={<Login onLoginSubmit={handleLoginSubmit} />}></Route>
+            <Route path='/signup' element={<Register onRegisterSubmit={handleRegisterSubmit}
+              isRequestOk={isRequestOk}
+              isInfoTooltipOpen={isInfoTooltipOpen}
+              onCloseInfoTooltip={handleInfoTooltipOpen} />}></Route>
+            <Route path='/signin' element={<Login onLoginSubmit={handleLoginSubmit}
+              isRequestOk={isRequestOk}
+              isInfoTooltipOpen={isInfoTooltipOpen}
+              onCloseInfoTooltip={handleInfoTooltipOpen} />}></Route>
             <Route path='*' element={<PageNotFound />}></Route>
           </Routes>
           :

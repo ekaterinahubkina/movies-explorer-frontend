@@ -6,7 +6,7 @@ import { useFormWithValidation } from '../useFormWithValidation/useFormWithValid
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 
-const Profile = ({ loggedIn, onExit, onUpdateUserInfo, isServerError, isRequestOk, isInfoTooltipOpen, onCloseInfoTooltip }) => {
+const Profile = ({ loggedIn, onExit, onUpdateUserInfo, isRequestOk, isInfoTooltipOpen, onCloseInfoTooltip }) => {
     const { values, errors, isValid, handleChange, resetForm } = useFormWithValidation();
     const currentUser = React.useContext(CurrentUserContext);
 
