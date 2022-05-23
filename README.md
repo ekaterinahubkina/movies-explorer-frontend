@@ -1,7 +1,7 @@
 Ссылка на макет  
 https://www.figma.com/file/ztQ4ADU2UkyD3qnG4d30u6/Diploma-(Copy)?node-id=932%3A3228  
 Сcылка на домен  
-http://movies.hubkina.nomoredomains.xyz/
+https://movies.hubkina.nomoredomains.xyz/
 
 
 
