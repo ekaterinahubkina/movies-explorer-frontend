@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./Profile.css";
 import { useState } from "react";
-import { CurrentUserContext } from '../context/CurrentUserContext';
+import { CurrentUserContext } from '../../context/CurrentUserContext';
 import { useFormWithValidation } from '../useFormWithValidation/useFormWithValidation';
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
@@ -9,6 +9,14 @@ import InfoTooltip from "../InfoTooltip/InfoTooltip";
 const Profile = ({ loggedIn, onExit, onUpdateUserInfo, isRequestOk, isInfoTooltipOpen, onCloseInfoTooltip }) => {
     const { values, errors, isValid, handleChange, resetForm } = useFormWithValidation();
     const currentUser = React.useContext(CurrentUserContext);
+    const [isInfoChanged, setIsInfoChanged] = useState(false);
+
+    useEffect(() => {
+        currentUser.name !== values.name || currentUser.email !== values.email ?
+            setIsInfoChanged(true)
+            : setIsInfoChanged(false);
+    }, [currentUser.name, currentUser.email, values.email, values.name])
+
 
     useEffect(() => {
         resetForm({ name: currentUser.name, email: currentUser.email }, {}, false)
@@ -54,7 +62,7 @@ const Profile = ({ loggedIn, onExit, onUpdateUserInfo, isRequestOk, isInfoToolti
                         <span className='form__error'>{errors.email}</span>
                     </div>
                     <div className="profile__buttons">
-                        {isValid ?
+                        {isValid && isInfoChanged ?
                             <button type='submit' className="profile__button profile__button_type_submit">Сохранить</button>
                             :
                             <>
@@ -66,7 +74,7 @@ const Profile = ({ loggedIn, onExit, onUpdateUserInfo, isRequestOk, isInfoToolti
                     </div>
                 </form>
             </section>
-            <InfoTooltip isOpen={isInfoTooltipOpen} onClose={onCloseInfoTooltip} isRequestOk={isRequestOk}/>
+            <InfoTooltip isOpen={isInfoTooltipOpen} onClose={onCloseInfoTooltip} isRequestOk={isRequestOk} />
         </>
     )
 }

@@ -59,7 +59,6 @@ class MainApi {
             })
         })
             .then(this._getResponseData)
-            .catch(err => console.log(err))
     }
 
     getSavedMovies() {
@@ -118,9 +117,9 @@ class MainApi {
     }
 }
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:3001';
+// const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:3001';
 const mainApi = new MainApi({
-    url: BASE_URL,
+    url: 'https://api.movies.hubkina.nomoredomains.work',
 });
 
 export default mainApi;

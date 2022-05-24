@@ -11,7 +11,7 @@ import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import PageNotFound from '../PageNotFound/PageNotFound';
-import { CurrentUserContext } from '../context/CurrentUserContext';
+import { CurrentUserContext } from '../../context/CurrentUserContext';
 import mainApi from '../../utils/MainApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import moviesApi from '../../utils/MoviesApi';
@@ -92,12 +92,14 @@ function App() {
   const resizeHandler = () => {
     setTimeout(() => {
       setCurrentWidth(window.innerWidth);
-    }, 1000000)
+    }, 6000)
   }
 
   useEffect(() => {
     window.addEventListener('resize', resizeHandler);
-    return window.removeEventListener('resize', resizeHandler);
+    return () => {
+      window.removeEventListener('resize', resizeHandler);
+    }
   }, [])
 
   useMemo(() => {
@@ -144,7 +146,8 @@ function App() {
     return mainApi.deleteFromSaved(movie)
       .then((res) => {
         console.log(res);
-        setSavedMovies(state => state.filter(el => el._id !== res._id))
+        setSavedMovies(state => state.filter(el => el._id !== res._id));
+        setSavedMoviesIds(state => state.filter(el => el !== res.movieId));
       })
       .catch((err) => {
         console.log(err);

@@ -17,7 +17,8 @@ function Movies({ onSearchSubmit, numberOfCardsToRender, numberOfCardsToAdd, onS
     const [isSeachHandeled, setIsSearchHandled] = useState(false);
 
     const handleCheckboxChange = () => {
-        setIsCheckboxChecked(!isCheckbobChecked)
+        setIsCheckboxChecked(!isCheckbobChecked);
+        setIsSearchHandled(true);
     }
 
     const handleSearch = (message) => {
