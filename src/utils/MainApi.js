@@ -117,7 +117,6 @@ class MainApi {
     }
 }
 
-
 //const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:3000';
 const mainApi = new MainApi({
     url: 'https://api.movies.hubkina.nomoredomains.work',

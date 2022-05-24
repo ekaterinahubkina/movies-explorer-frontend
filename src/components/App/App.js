@@ -72,6 +72,7 @@ function App() {
     setIsDataLoading(true);
     return moviesApi.getMovies()
       .then((res) => {
+     //   console.log(res.filter((item) => item.duration <= 40 && item.nameRU.includes('а')));
         setMovies(res);
         filterCallback(res);
       })

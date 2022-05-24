@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
 
-const SearchForm = ({ isCheckbobChecked, onCheckboxChange, onSearchSubmit }) => {
+const SearchForm = ({ isCheckbobChecked, onCheckboxChange, onSearchSubmit, handleCheckboxOnLoadFromLocalstorage }) => {
     const location = useLocation();
     const [error, setError] = useState('');
     const [searchMessage, setSearchMessage] = useState(location.pathname === '/movies' ? localStorage.getItem('searchMessage') || '' : '');

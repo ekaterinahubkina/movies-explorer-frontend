@@ -2,12 +2,12 @@ import './Movies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import filterMovies from '../../utils/functions';
 import Preloader from '../Preloader/Preloader';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
 
-function Movies({ onSearchSubmit, numberOfCardsToRender, numberOfCardsToAdd, onSaveMovie, savedMoviesIds,
+function Movies({ movies, onSearchSubmit, numberOfCardsToRender, numberOfCardsToAdd, onSaveMovie, savedMoviesIds,
     onDislikeMovie, isDataLoading, isInfoTooltipOpen, onCloseInfoTooltip, isRequestOk }) {
 
     const [filteredMovies, setFilteredMovies] = useState(JSON.parse(localStorage.getItem('filteredMovies')) || []);
@@ -20,7 +20,16 @@ function Movies({ onSearchSubmit, numberOfCardsToRender, numberOfCardsToAdd, onS
         setIsCheckboxChecked(!isCheckbobChecked);
         setIsSearchHandled(true);
     }
+    useEffect(() => {
+        if (localStorage.getItem('filteredMovies')) {
+            const filteredMovies = JSON.parse(localStorage.getItem('filteredMovies'));
+            setShortFilterseMovies(filteredMovies.filter((item) => item.duration <= 40));
+        }
+    }, [])
 
+    const handleCheckboxOnLoadFromLocalstorage = (message) => {
+        filterMovies(movies, message)
+    }
     const handleSearch = (message) => {
         setCardsToRender(numberOfCardsToRender);
         onSearchSubmit((movies) => {
@@ -53,7 +62,8 @@ function Movies({ onSearchSubmit, numberOfCardsToRender, numberOfCardsToAdd, onS
         <>
             <section className='movies'>
                 <div className='movies__wrapper'>
-                    <SearchForm isCheckbobChecked={isCheckbobChecked} onCheckboxChange={handleCheckboxChange} onSearchSubmit={handleSearch} />
+                    <SearchForm isCheckbobChecked={isCheckbobChecked} onCheckboxChange={handleCheckboxChange}
+                        onSearchSubmit={handleSearch} handleCheckboxOnLoadFromLocalstorage={handleCheckboxOnLoadFromLocalstorage} />
                     {isDataLoading ?
                         <Preloader />
                         :
