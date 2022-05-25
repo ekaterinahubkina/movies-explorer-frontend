@@ -2,9 +2,12 @@ import MobileNavigation from '../MobileNavigation/MobileNavigation';
 import './BurgerMenu.css';
 import { useState } from 'react';
 
-const BurgerMenu = ({ location, currentWidth, isMobileMenuOpen, onBurgerMenuClick, onCloseMobileMenu }) => {
+const BurgerMenu = () => {
+    const [isChecked, setIsChecked] = useState(false);
 
-    const [isChecked, setIsChecked] = useState(isMobileMenuOpen);
+    const closeMobileMenu = () => {
+        setIsChecked(false);
+    }
 
     const handleChange = () => {
         setIsChecked(!isChecked);
@@ -12,24 +15,13 @@ const BurgerMenu = ({ location, currentWidth, isMobileMenuOpen, onBurgerMenuClic
 
     return (
         <>
-            {
-                location.pathname === '/' ?
-                    null
-                    :
-                    <>
-                        <label className='burger-menu'>
-                            <input type='checkbox' onClick={onBurgerMenuClick} onChange={handleChange} className='burger-menu__checkbox'></input>
-                            <span className='burger-menu__burger'></span>
-                        </label>
-                        <MobileNavigation 
-                        isChecked={isChecked} 
-                        urrentWidth={currentWidth}
-                        isMobileMenuOpen={isMobileMenuOpen}
-                        onBurgerMenuClick={onBurgerMenuClick}
-                        onCloseMobileMenu={onCloseMobileMenu} />
-                        
-                    </>
-            }
+            <label className='burger-menu'>
+                <input type='checkbox' checked={isChecked} onChange={handleChange} className='burger-menu__checkbox'></input>
+                <span className='burger-menu__burger'></span>
+            </label>
+            <MobileNavigation
+                isChecked={isChecked}
+                onCloseMobileMenu={closeMobileMenu} />
         </>
     )
 }
