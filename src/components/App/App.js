@@ -15,6 +15,7 @@ import { CurrentUserContext } from '../../context/CurrentUserContext';
 import mainApi from '../../utils/MainApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import moviesApi from '../../utils/MoviesApi';
+import Preloader from '../Preloader/Preloader';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -72,7 +73,7 @@ function App() {
     setIsDataLoading(true);
     return moviesApi.getMovies()
       .then((res) => {
-     //   console.log(res.filter((item) => item.duration <= 40 && item.nameRU.includes('а')));
+        //   console.log(res.filter((item) => item.duration <= 40 && item.nameRU.includes('а')));
         setMovies(res);
         filterCallback(res);
       })
@@ -272,7 +273,7 @@ function App() {
             <Route path='*' element={<PageNotFound />}></Route>
           </Routes>
           :
-          null}
+          <Preloader />}
         {routesForFooter.includes(location.pathname) ?
           <Footer />
           : null}
