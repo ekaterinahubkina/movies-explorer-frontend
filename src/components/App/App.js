@@ -37,17 +37,21 @@ function App() {
   const routesForFooter = ['/', '/movies', '/saved-movies'];
 
   useEffect(() => {
-    mainApi.tokenCheck()
-      .then(() => {
-        setIsLoggedIn(true);
-        setIsUserChecked(true);
-        console.log('эффект check token')
-      })
-      .catch(err => {
-        console.log(err);
-        setIsUserChecked(true);
-        localStorage.removeItem('token');
-      })
+    if (localStorage.getItem('token')) {
+      mainApi.tokenCheck()
+        .then(() => {
+          setIsLoggedIn(true);
+          setIsUserChecked(true);
+          console.log('эффект check token')
+        })
+        .catch(err => {
+          console.log(err);
+          // setIsUserChecked(true);
+          localStorage.removeItem('token');
+        })
+    } else {
+      setIsUserChecked(true);
+    }
   }, [])
 
   useEffect(() => {
@@ -215,68 +219,73 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
-        {routesForHeader.includes(location.pathname) ?
-          <Header
-            loggedIn={isLoggedIn} />
-          : null}
         {isUserChecked ?
-          <Routes>
-            <Route path='/' element={<Main />}></Route>
-            <Route
-              path="/movies"
-              element={
-                <ProtectedRoute loggedIn={isLoggedIn}>
-                  <Movies movies={movies}
-                    onSearchSubmit={handleMoviesSearchSumit}
-                    numberOfCardsToRender={numberOfCardsToRender}
-                    numberOfCardsToAdd={numberOfCardsToAdd}
-                    onSaveMovie={handleSaveMovies}
-                    onDeleteMovie={handleDeleteMoviesFromSaved}
-                    savedMoviesIds={savedMoviesIds}
-                    onDislikeMovie={handleDislikeMovie}
-                    isDataLoading={isDataLoading}
-                    isRequestOk={isRequestOk}
-                    isInfoTooltipOpen={isInfoTooltipOpen}
-                    onCloseInfoTooltip={handleInfoTooltipOpen} />
-                </ProtectedRoute>
-              } />
-            <Route
-              path="/saved-movies"
-              element={
-                <ProtectedRoute loggedIn={isLoggedIn}>
-                  <SavedMovies savedMovies={savedMovies}
-                    onDeleteMovie={handleDeleteMoviesFromSaved}
-                    savedMoviesIds={savedMoviesIds}
-                    isDataLoading={isDataLoading} />
-                </ProtectedRoute>
-              } />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute loggedIn={isLoggedIn}>
-                  <Profile loggedIn={isLoggedIn}
-                    onExit={handleExit}
-                    onUpdateUserInfo={handleUpdateUserInfo}
-                    isRequestOk={isRequestOk}
-                    isInfoTooltipOpen={isInfoTooltipOpen}
-                    onCloseInfoTooltip={handleInfoTooltipOpen} />
-                </ProtectedRoute>
-              } />
-            <Route path='/signup' element={<Register onRegisterSubmit={handleRegisterSubmit}
-              isRequestOk={isRequestOk}
-              isInfoTooltipOpen={isInfoTooltipOpen}
-              onCloseInfoTooltip={handleInfoTooltipOpen} />}></Route>
-            <Route path='/signin' element={<Login onLoginSubmit={handleLoginSubmit}
-              isRequestOk={isRequestOk}
-              isInfoTooltipOpen={isInfoTooltipOpen}
-              onCloseInfoTooltip={handleInfoTooltipOpen} />}></Route>
-            <Route path='*' element={<PageNotFound />}></Route>
-          </Routes>
+          <>
+            {routesForHeader.includes(location.pathname) ?
+              <Header
+                loggedIn={isLoggedIn} />
+              : null}
+            {/* {isUserChecked ? */}
+            <Routes>
+              <Route path='/' element={<Main />}></Route>
+              <Route
+                path="/movies"
+                element={
+                  <ProtectedRoute loggedIn={isLoggedIn}>
+                    <Movies movies={movies}
+                      onSearchSubmit={handleMoviesSearchSumit}
+                      numberOfCardsToRender={numberOfCardsToRender}
+                      numberOfCardsToAdd={numberOfCardsToAdd}
+                      onSaveMovie={handleSaveMovies}
+                      onDeleteMovie={handleDeleteMoviesFromSaved}
+                      savedMoviesIds={savedMoviesIds}
+                      onDislikeMovie={handleDislikeMovie}
+                      isDataLoading={isDataLoading}
+                      isRequestOk={isRequestOk}
+                      isInfoTooltipOpen={isInfoTooltipOpen}
+                      onCloseInfoTooltip={handleInfoTooltipOpen} />
+                  </ProtectedRoute>
+                } />
+              <Route
+                path="/saved-movies"
+                element={
+                  <ProtectedRoute loggedIn={isLoggedIn}>
+                    <SavedMovies savedMovies={savedMovies}
+                      onDeleteMovie={handleDeleteMoviesFromSaved}
+                      savedMoviesIds={savedMoviesIds}
+                      isDataLoading={isDataLoading} />
+                  </ProtectedRoute>
+                } />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute loggedIn={isLoggedIn}>
+                    <Profile loggedIn={isLoggedIn}
+                      onExit={handleExit}
+                      onUpdateUserInfo={handleUpdateUserInfo}
+                      isRequestOk={isRequestOk}
+                      isInfoTooltipOpen={isInfoTooltipOpen}
+                      onCloseInfoTooltip={handleInfoTooltipOpen} />
+                  </ProtectedRoute>
+                } />
+              <Route path='/signup' element={<Register onRegisterSubmit={handleRegisterSubmit}
+                isRequestOk={isRequestOk}
+                isInfoTooltipOpen={isInfoTooltipOpen}
+                onCloseInfoTooltip={handleInfoTooltipOpen} />}></Route>
+              <Route path='/signin' element={<Login onLoginSubmit={handleLoginSubmit}
+                isRequestOk={isRequestOk}
+                isInfoTooltipOpen={isInfoTooltipOpen}
+                onCloseInfoTooltip={handleInfoTooltipOpen} />}></Route>
+              <Route path='*' element={<PageNotFound />}></Route>
+            </Routes>
+            {/* :
+          <Preloader />} */}
+            {routesForFooter.includes(location.pathname) ?
+              <Footer />
+              : null}
+          </>
           :
           <Preloader />}
-        {routesForFooter.includes(location.pathname) ?
-          <Footer />
-          : null}
       </div>
     </CurrentUserContext.Provider>
   );
