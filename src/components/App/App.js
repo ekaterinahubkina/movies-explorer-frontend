@@ -46,7 +46,6 @@ function App() {
         })
         .catch(err => {
           console.log(err);
-          // setIsUserChecked(true);
           localStorage.removeItem('token');
         })
     } else {
@@ -77,7 +76,6 @@ function App() {
     setIsDataLoading(true);
     return moviesApi.getMovies()
       .then((res) => {
-        //   console.log(res.filter((item) => item.duration <= 40 && item.nameRU.includes('а')));
         setMovies(res);
         filterCallback(res);
       })
@@ -225,7 +223,6 @@ function App() {
               <Header
                 loggedIn={isLoggedIn} />
               : null}
-            {/* {isUserChecked ? */}
             <Routes>
               <Route path='/' element={<Main />}></Route>
               <Route
@@ -278,8 +275,6 @@ function App() {
                 onCloseInfoTooltip={handleInfoTooltipOpen} />}></Route>
               <Route path='*' element={<PageNotFound />}></Route>
             </Routes>
-            {/* :
-          <Preloader />} */}
             {routesForFooter.includes(location.pathname) ?
               <Footer />
               : null}
