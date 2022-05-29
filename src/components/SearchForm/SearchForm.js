@@ -7,12 +7,10 @@ const SearchForm = ({ isCheckbobChecked, onCheckboxChange, onSearchSubmit, handl
     const location = useLocation();
     const [error, setError] = useState('');
     const [searchMessage, setSearchMessage] = useState(location.pathname === '/movies' ? localStorage.getItem('searchMessage') || '' : '');
-    // const [isChecked, setIsChecked] = useState(location.pathname === '/movies' ? JSON.parse(localStorage.getItem('checkboxStatus')) || false : false);
 
     const handleChange = (event) => {
         setError('');
         setSearchMessage(event.target.value);
-
     }
 
     const handleCheckboxChange = () => {

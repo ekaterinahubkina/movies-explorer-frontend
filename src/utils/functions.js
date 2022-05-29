@@ -5,8 +5,6 @@ const filterMovies = (arr, str) => {
         return nameRuToLowerCase.includes(searchMessageToLowerCase);
     })
     return filteredMovies;
-    // const filteredShortMovies = filteredMovies.filter((item) => item.duration <= 40);
-    // return checkboxStatus ? filteredShortMovies : filteredMovies;
 }
 
 
